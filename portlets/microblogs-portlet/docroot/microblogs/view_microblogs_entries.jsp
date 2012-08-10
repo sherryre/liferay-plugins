@@ -66,7 +66,6 @@ for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 	catch (NoSuchUserException nsue) {
 	}
 %>
-
 	<div class="microblogs-entry" id="microblogsEntry<%= microblogsEntry.getMicroblogsEntryId() %>">
 		<span class="thumbnail">
 			<a href="<%= userDisplayURL %>"><img alt="<%= userFullName %>" src="<%= userPortaitURL %>" /></a>
