@@ -55,9 +55,12 @@ public class StartupAction extends SimpleAction {
 			SocialActivityInterpreterLocalServiceUtil.getActivityInterpreters(
 				"SO");
 
-		while (socialActivityInterpreters.iterator().hasNext()) {
-			SocialActivityInterpreterLocalServiceUtil.deleteActivityInterpreter(
-				socialActivityInterpreters.iterator().next());
+		if(socialActivityInterpreters != null) {
+			while (socialActivityInterpreters.iterator().hasNext()) {
+				SocialActivityInterpreterLocalServiceUtil.
+					deleteActivityInterpreter(
+						socialActivityInterpreters.iterator().next());
+			}
 		}
 
 		String[] portletIds =
