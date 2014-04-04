@@ -141,6 +141,7 @@ public class SODataFactory extends DataFactory {
 	public void initLayoutSetPrototype() throws Exception {
 		setupLayoutSetPrototypeSite();
 		setupLayoutSetPrototypeUserPrivate();
+		setupLayoutSetPrototypeUserPublic();
 	}
 
 	public void initSOUserRoleModel() {
@@ -474,6 +475,58 @@ public class SODataFactory extends DataFactory {
 			"1_WAR_tasksportlet", null);
 	}
 
+	protected void setupLayoutSetPrototypeUserPublic() throws Exception {
+		_userPublicLayoutSetPrototypeId = getCounterNext();
+
+		newLayoutSetPrototypeModel(
+			_userPublicLayoutSetPrototypeId, _defaultUserId,
+			"Social Office User Home", StringPool.BLANK, true);
+
+		long expandoRowId = getCounterNext();
+
+		newExpandoValueModel(
+			getCounterNext(), _layoutSetPrototypeExpandoTableId,
+			_layoutSetPrototypeExpandoColumnId, expandoRowId,
+			_layoutSetPrototypeClassNameId, _userPublicLayoutSetPrototypeId,
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_USER_PRIVATE);
+
+		newExpandoRowModel(
+			expandoRowId, _layoutSetPrototypeExpandoTableId,
+			_userPublicLayoutSetPrototypeId);
+
+		_userPublicLayoutSetPrototypeGroupId = getCounterNext();
+
+		_groupModels.add(
+			newGroupModel(
+				_userPublicLayoutSetPrototypeGroupId,
+				_layoutSetPrototypeClassNameId, _userPublicLayoutSetPrototypeId,
+				String.valueOf(_userPublicLayoutSetPrototypeId), false));
+
+		newSOLayoutSetModel(_userPublicLayoutSetPrototypeGroupId, true, 0);
+		newSOLayoutSetModel(_userPublicLayoutSetPrototypeGroupId, false, 3);
+
+		// Profile
+
+		newLayoutModel(
+			_userPublicLayoutSetPrototypeGroupId, "Profile", "1_2_columns_ii",
+			"2_WAR_contactsportlet_INSTANCE_abcd",
+			"2_WAR_microblogsportlet,2_WAR_contactsportlet_INSTANCE_efgh," +
+				PortletKeys.SO_ACTIVITIES);
+
+		// Contacts
+
+		newLayoutModel(
+			_userPublicLayoutSetPrototypeGroupId, "Contacts", "1_column",
+			"2_WAR_contactsportlet_INSTANCE_abcd,1_WAR_contactsportlet", null);
+
+		// Microblogs
+
+		newLayoutModel(
+			_userPublicLayoutSetPrototypeGroupId, "Microblogs", "1_column",
+			"2_WAR_contactsportlet_INSTANCE_abcd,1_WAR_microblogsportlet",
+			null);
+	}
+
 	private long _companyId;
 	private long _defaultUserId;
 	private List<ExpandoColumnModel> _expandoColumnModels =
@@ -501,5 +554,7 @@ public class SODataFactory extends DataFactory {
 	private RoleModel _soUserRoleModel;
 	private long _userPrivateLayoutSetPrototypeGroupId;
 	private long _userPrivateLayoutSetPrototypeId;
+	private long _userPublicLayoutSetPrototypeGroupId;
+	private long _userPublicLayoutSetPrototypeId;
 
 }
