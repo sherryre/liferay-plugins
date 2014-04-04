@@ -140,6 +140,7 @@ public class SODataFactory extends DataFactory {
 
 	public void initLayoutSetPrototype() throws Exception {
 		setupLayoutSetPrototypeSite();
+		setupLayoutSetPrototypeUserPrivate();
 	}
 
 	public void initSOUserRoleModel() {
@@ -403,6 +404,76 @@ public class SODataFactory extends DataFactory {
 			PortletKeys.SO_INVITE_MEMBERS + ",4_WAR_contactsportlet", null);
 	}
 
+	protected void setupLayoutSetPrototypeUserPrivate() throws Exception {
+		_userPrivateLayoutSetPrototypeId = getCounterNext();
+
+		newLayoutSetPrototypeModel(
+			_userPrivateLayoutSetPrototypeId, _defaultUserId,
+			"Social Office User Home", StringPool.BLANK, true);
+
+		long expandoRowId = getCounterNext();
+
+		newExpandoValueModel(
+			getCounterNext(), _layoutSetPrototypeExpandoTableId,
+			_layoutSetPrototypeExpandoColumnId, expandoRowId,
+			_layoutSetPrototypeClassNameId, _userPrivateLayoutSetPrototypeId,
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_USER_PRIVATE);
+
+		newExpandoRowModel(
+			expandoRowId, _layoutSetPrototypeExpandoTableId,
+			_userPrivateLayoutSetPrototypeId);
+
+		_userPrivateLayoutSetPrototypeGroupId = getCounterNext();
+
+		_groupModels.add(
+			newGroupModel(
+				_userPrivateLayoutSetPrototypeGroupId,
+				_layoutSetPrototypeClassNameId,
+				_userPrivateLayoutSetPrototypeId,
+				String.valueOf(_siteLayoutSetPrototypeId), false));
+
+		newSOLayoutSetModel(_userPrivateLayoutSetPrototypeGroupId, true, 6);
+		newSOLayoutSetModel(_userPrivateLayoutSetPrototypeGroupId, false, 0);
+
+		// Dashboard
+
+		newLayoutModel(
+			_userPrivateLayoutSetPrototypeGroupId, "Dashboard", "2_columns_iii",
+			"2_WAR_microblogsportlet,1_WAR_soannouncementsportlet," +
+				"1_WAR_soportlet",
+			"2_WAR_tasksportlet,1_WAR_eventsdisplayportlet");
+
+		// Contacts Center
+
+		newLayoutModel(
+			_userPrivateLayoutSetPrototypeGroupId, "Contacts Center",
+			"1_column", "1_WAR_contactsportlet", null);
+
+		// Microblogs
+
+		newLayoutModel(
+			_userPrivateLayoutSetPrototypeGroupId, "Microblogs", "1_column",
+			"1_WAR_microblogsportlet", null);
+
+		// Messages
+
+		newLayoutModel(
+			_userPrivateLayoutSetPrototypeGroupId, "Messages", "1_column",
+			"1_WAR_privatemessagingportlet", null);
+
+		// Documents
+
+		newLayoutModel(
+			_userPrivateLayoutSetPrototypeGroupId, "Documents", "1_column",
+			PortletKeys.DOCUMENT_LIBRARY, null);
+
+		// Tasks
+
+		newLayoutModel(
+			_userPrivateLayoutSetPrototypeGroupId, "Tasks", "1_column",
+			"1_WAR_tasksportlet", null);
+	}
+
 	private long _companyId;
 	private long _defaultUserId;
 	private List<ExpandoColumnModel> _expandoColumnModels =
@@ -428,5 +499,7 @@ public class SODataFactory extends DataFactory {
 	private long _siteLayoutSetPrototypeGroupId;
 	private long _siteLayoutSetPrototypeId;
 	private RoleModel _soUserRoleModel;
+	private long _userPrivateLayoutSetPrototypeGroupId;
+	private long _userPrivateLayoutSetPrototypeId;
 
 }
