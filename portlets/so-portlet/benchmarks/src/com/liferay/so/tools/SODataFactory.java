@@ -80,8 +80,16 @@ public class SODataFactory extends DataFactory {
 		initLayoutSetPrototype();
 	}
 
+	public String getColorSchemeId() {
+		return _colorSchemeId;
+	}
+
 	public long getCompanyId() {
 		return _companyId;
+	}
+
+	public String getDate() {
+		return getDateString(new Date());
 	}
 
 	public List<ExpandoColumnModel> getExpandoColumnModels() {
@@ -137,8 +145,28 @@ public class SODataFactory extends DataFactory {
 		return _layoutSetPrototypeModels;
 	}
 
+	public LayoutSetPrototypeModel getLayoutSetPrototypeSiteModel() {
+		return _layoutSetPrototypeSiteModel;
+	}
+
+	public LayoutSetPrototypeModel getLayoutSetPrototypeUserPrivateModel() {
+		return _layoutSetPrototypeUserPrivateModel;
+	}
+
+	public LayoutSetPrototypeModel getLayoutSetPrototypeUserPublicModel() {
+		return _layoutSetPrototypeUserPublicModel;
+	}
+
+	public String getSOTypeSettings() {
+		return "last-merge-time="+ System.currentTimeMillis();
+	}
+
 	public RoleModel getSOUserRoleModel() {
 		return _soUserRoleModel;
+	}
+
+	public String getThemeId() {
+		return _themeId;
 	}
 
 	public long getUserClassNameId() {
@@ -369,7 +397,8 @@ public class SODataFactory extends DataFactory {
 		LayoutSetModel layoutSetModel = newLayoutSetModel(
 			groupId, privateLayout, pageCount);
 
-		layoutSetModel.setThemeId("so_WAR_sotheme");
+		layoutSetModel.setThemeId(_themeId);
+		layoutSetModel.setColorSchemeId(_colorSchemeId);
 
 		_layoutSetModels.add(layoutSetModel);
 
@@ -379,7 +408,7 @@ public class SODataFactory extends DataFactory {
 	protected void setupLayoutSetPrototypeSite() throws Exception {
 		_siteLayoutSetPrototypeId = getCounterNext();
 
-		newLayoutSetPrototypeModel(
+		_layoutSetPrototypeSiteModel = newLayoutSetPrototypeModel(
 			_siteLayoutSetPrototypeId, _defaultUserId,
 			"Default Social Office Site", StringPool.BLANK, true);
 
@@ -475,7 +504,7 @@ public class SODataFactory extends DataFactory {
 	protected void setupLayoutSetPrototypeUserPrivate() throws Exception {
 		_userPrivateLayoutSetPrototypeId = getCounterNext();
 
-		newLayoutSetPrototypeModel(
+		_layoutSetPrototypeUserPrivateModel = newLayoutSetPrototypeModel(
 			_userPrivateLayoutSetPrototypeId, _defaultUserId,
 			"Social Office User Home", StringPool.BLANK, true);
 
@@ -549,7 +578,7 @@ public class SODataFactory extends DataFactory {
 	protected void setupLayoutSetPrototypeUserPublic() throws Exception {
 		_userPublicLayoutSetPrototypeId = getCounterNext();
 
-		newLayoutSetPrototypeModel(
+		_layoutSetPrototypeUserPublicModel = newLayoutSetPrototypeModel(
 			_userPublicLayoutSetPrototypeId, _defaultUserId,
 			"Social Office User Home", StringPool.BLANK, true);
 
@@ -601,6 +630,7 @@ public class SODataFactory extends DataFactory {
 			null);
 	}
 
+	private String _colorSchemeId = "01";
 	private long _companyId;
 	private long _defaultUserId;
 	private List<ExpandoColumnModel> _expandoColumnModels =
@@ -624,9 +654,13 @@ public class SODataFactory extends DataFactory {
 	private long _layoutSetPrototypeExpandoTableId;
 	private List<LayoutSetPrototypeModel> _layoutSetPrototypeModels =
 		new ArrayList<LayoutSetPrototypeModel>();
+	private LayoutSetPrototypeModel _layoutSetPrototypeSiteModel;
+	private LayoutSetPrototypeModel _layoutSetPrototypeUserPrivateModel;
+	private LayoutSetPrototypeModel _layoutSetPrototypeUserPublicModel;
 	private long _siteLayoutSetPrototypeGroupId;
 	private long _siteLayoutSetPrototypeId;
 	private RoleModel _soUserRoleModel;
+	private String _themeId = "so_WAR_sotheme";
 	private long _userClassNameId = getClassNameId(User.class.getName());
 	private long _userPrivateLayoutSetPrototypeGroupId;
 	private long _userPrivateLayoutSetPrototypeId;
