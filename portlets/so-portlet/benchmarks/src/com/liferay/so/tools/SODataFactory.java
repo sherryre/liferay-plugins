@@ -50,11 +50,15 @@ import com.liferay.so.util.SocialOfficeConstants;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author Matthew Kong
+ * @author Sherry Yang
  */
 public class SODataFactory extends DataFactory {
 
@@ -91,6 +95,14 @@ public class SODataFactory extends DataFactory {
 		return _expandoValueModels;
 	}
 
+	public String getFriendlyURL(long userId) {
+		return (String)_usersInfos.get(userId)[1];
+	}
+
+	public long getGroupId(long userId) {
+		return (Long)_usersInfos.get(userId)[0];
+	}
+
 	@Override
 	public List<GroupModel> getGroupModels() {
 		return _groupModels;
@@ -110,6 +122,10 @@ public class SODataFactory extends DataFactory {
 
 	public RoleModel getSOUserRoleModel() {
 		return _soUserRoleModel;
+	}
+
+	public Set<Long> getUserIds() {
+		return _usersInfos.keySet();
 	}
 
 	public void initExpandos() {
@@ -147,6 +163,18 @@ public class SODataFactory extends DataFactory {
 	public void initSOUserRoleModel() {
 		_soUserRoleModel = newRoleModel(
 			RoleConstants.SOCIAL_OFFICE_USER, RoleConstants.TYPE_REGULAR);
+	}
+
+	@Override
+	public GroupModel newGroupModel(UserModel userModel) throws Exception {
+		GroupModel groupModel = super.newGroupModel(userModel);
+
+		Object[] infos = new Object[]
+			{groupModel.getGroupId(), groupModel.getFriendlyURL()};
+
+		_usersInfos.put(userModel.getUserId(), infos);
+
+		return groupModel;
 	}
 
 	protected ExpandoColumnModel newExpandoColumnModel(
@@ -556,5 +584,6 @@ public class SODataFactory extends DataFactory {
 	private long _userPrivateLayoutSetPrototypeId;
 	private long _userPublicLayoutSetPrototypeGroupId;
 	private long _userPublicLayoutSetPrototypeId;
+	private Map<Long, Object[]> _usersInfos = new HashMap<Long, Object[]>();
 
 }
