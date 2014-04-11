@@ -19,3 +19,11 @@
 
 	insert into ExpandoValue values (${userExpandoValueModel.valueId}, ${userExpandoValueModel.companyId}, ${userExpandoValueModel.tableId}, ${userExpandoValueModel.columnId}, ${userExpandoValueModel.rowId}, ${userExpandoValueModel.classNameId}, ${userExpandoValueModel.classPK}, '${userExpandoValueModel.data}');
 </#macro>
+
+<#macro updateGroup
+	_userId
+>
+	<#local treePath = dataFactory.getFriendlyURL(_userId) + "/">
+
+	update Group_ set mvccVersion=0, uuid_='${dataFactory.getUUID()}',  companyId=${dataFactory.companyId}, creatorUserId=${_userId}, classNameId=${dataFactory.userClassNameId}, classPK=${_userId}, parentGroupId=0, liveGroupId=0, treePath='${treePath}', name='${_userId}', description='', type_=0, typeSettings='${dataFactory.groupTypeSettings}', manualMembership=1, membershipRestriction=0, friendlyURL='${dataFactory.getFriendlyURL(_userId)}', site=0, remoteStagingGroupCount=0, active_=1 where groupId=${dataFactory.getGroupId(_userId)};
+</#macro>

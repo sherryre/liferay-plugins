@@ -30,6 +30,7 @@ import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.LayoutSetPrototypeModel;
 import com.liferay.portal.model.LayoutTypePortletConstants;
 import com.liferay.portal.model.RoleModel;
+import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserModel;
 import com.liferay.portal.model.impl.LayoutSetPrototypeModelImpl;
 import com.liferay.portal.tools.samplesqlbuilder.DataFactory;
@@ -79,6 +80,10 @@ public class SODataFactory extends DataFactory {
 		initLayoutSetPrototype();
 	}
 
+	public long getCompanyId() {
+		return _companyId;
+	}
+
 	public List<ExpandoColumnModel> getExpandoColumnModels() {
 		return _expandoColumnModels;
 	}
@@ -116,6 +121,10 @@ public class SODataFactory extends DataFactory {
 		return _groupModels;
 	}
 
+	public String getGroupTypeSettings() {
+		return _groupTypeSettings;
+	}
+
 	public List<LayoutModel> getLayoutModels() {
 		return _layoutModels;
 	}
@@ -132,8 +141,16 @@ public class SODataFactory extends DataFactory {
 		return _soUserRoleModel;
 	}
 
+	public long getUserClassNameId() {
+		return _userClassNameId;
+	}
+
 	public Set<Long> getUserIds() {
 		return _usersInfos.keySet();
+	}
+
+	public String getUUID() {
+		return SequentialUUID.generate();
 	}
 
 	public void initExpandos() {
@@ -249,6 +266,20 @@ public class SODataFactory extends DataFactory {
 		_expandoTableModels.add(expandoTableModel);
 
 		return expandoTableModel;
+	}
+
+	protected GroupModel newGroupModel(
+			long groupId, long classNameId, long classPK, String name,
+			boolean site)
+		throws Exception {
+
+		GroupModel groupModel = super.newGroupModel(
+			groupId, classNameId, classPK, name, site);
+
+		groupModel.setTypeSettings(_groupTypeSettings);
+		groupModel.setFriendlyURL("/template-" + groupModel.getGroupId());
+
+		return groupModel;
 	}
 
 	protected LayoutModel newLayoutModel(
@@ -583,6 +614,7 @@ public class SODataFactory extends DataFactory {
 	private long _groupExpandoColumnId;
 	private long _groupExpandoTableId;
 	private List<GroupModel> _groupModels = new ArrayList<GroupModel>();
+	private String _groupTypeSettings = "customJspServletContextName=so-hook";
 	private List<LayoutModel> _layoutModels = new ArrayList<LayoutModel>();
 	private List<LayoutSetModel> _layoutSetModels =
 		new ArrayList<LayoutSetModel>();
@@ -595,6 +627,7 @@ public class SODataFactory extends DataFactory {
 	private long _siteLayoutSetPrototypeGroupId;
 	private long _siteLayoutSetPrototypeId;
 	private RoleModel _soUserRoleModel;
+	private long _userClassNameId = getClassNameId(User.class.getName());
 	private long _userPrivateLayoutSetPrototypeGroupId;
 	private long _userPrivateLayoutSetPrototypeId;
 	private long _userPublicLayoutSetPrototypeGroupId;
