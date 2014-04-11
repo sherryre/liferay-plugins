@@ -17,4 +17,8 @@
 	<@updateUserLayoutSet
 		_userId = userId
 	/>
+
+	<@updateUserLayouts
+		_userId = userId
+	/>
 </#list>
