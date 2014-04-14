@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -81,7 +81,7 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public String getColorSchemeId() {
-		return _colorSchemeId;
+		return _COLOR_SCHEME_ID;
 	}
 
 	public long getCompanyId() {
@@ -109,7 +109,7 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public String getFriendlyURL(long userId) {
-		return (String)_usersInfos.get(userId)[1];
+		return (String)_userGroupIdsAndFriendlyURLs.get(userId)[1];
 	}
 
 	public long getGroupExpandoColumnId() {
@@ -121,7 +121,7 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public long getGroupId(long userId) {
-		return (Long)_usersInfos.get(userId)[0];
+		return (Long)_userGroupIdsAndFriendlyURLs.get(userId)[0];
 	}
 
 	@Override
@@ -171,7 +171,7 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public String getThemeId() {
-		return _themeId;
+		return _THEME_ID;
 	}
 
 	public long getUserClassNameId() {
@@ -179,7 +179,7 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public Set<Long> getUserIds() {
-		return _usersInfos.keySet();
+		return _userGroupIdsAndFriendlyURLs.keySet();
 	}
 
 	public List<LayoutModel> getUserLayoutModels() {
@@ -263,10 +263,11 @@ public class SODataFactory extends DataFactory {
 	public GroupModel newGroupModel(UserModel userModel) throws Exception {
 		GroupModel groupModel = super.newGroupModel(userModel);
 
-		Object[] infos = new Object[]
+		Object[] groupIdAndFriendlyURL = new Object[]
 			{groupModel.getGroupId(), groupModel.getFriendlyURL()};
 
-		_usersInfos.put(userModel.getUserId(), infos);
+		_userGroupIdsAndFriendlyURLs.put(
+			userModel.getUserId(), groupIdAndFriendlyURL);
 
 		return groupModel;
 	}
@@ -404,8 +405,8 @@ public class SODataFactory extends DataFactory {
 		LayoutSetModel layoutSetModel = newLayoutSetModel(
 			groupId, privateLayout, pageCount);
 
-		layoutSetModel.setThemeId(_themeId);
-		layoutSetModel.setColorSchemeId(_colorSchemeId);
+		layoutSetModel.setThemeId(_THEME_ID);
+		layoutSetModel.setColorSchemeId(_COLOR_SCHEME_ID);
 
 		_layoutSetModels.add(layoutSetModel);
 
@@ -672,7 +673,10 @@ public class SODataFactory extends DataFactory {
 		_userLayoutModels.add(MicroblogsModel);
 	}
 
-	private String _colorSchemeId = "01";
+	private static final String _COLOR_SCHEME_ID = "01";
+
+	private static final String _THEME_ID = "so_WAR_sotheme";
+
 	private long _companyId;
 	private long _defaultUserId;
 	private List<ExpandoColumnModel> _expandoColumnModels =
@@ -702,13 +706,13 @@ public class SODataFactory extends DataFactory {
 	private long _siteLayoutSetPrototypeGroupId;
 	private long _siteLayoutSetPrototypeId;
 	private RoleModel _soUserRoleModel;
-	private String _themeId = "so_WAR_sotheme";
 	private long _userClassNameId = getClassNameId(User.class.getName());
+	private Map<Long, Object[]> _userGroupIdsAndFriendlyURLs =
+		new HashMap<Long, Object[]>();
 	private List<LayoutModel> _userLayoutModels = new ArrayList<LayoutModel>();
 	private long _userPrivateLayoutSetPrototypeGroupId;
 	private long _userPrivateLayoutSetPrototypeId;
 	private long _userPublicLayoutSetPrototypeGroupId;
 	private long _userPublicLayoutSetPrototypeId;
-	private Map<Long, Object[]> _usersInfos = new HashMap<Long, Object[]>();
 
 }
