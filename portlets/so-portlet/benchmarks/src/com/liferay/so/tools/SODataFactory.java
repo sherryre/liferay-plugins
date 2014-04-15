@@ -108,10 +108,6 @@ public class SODataFactory extends DataFactory {
 		return _expandoValueModels;
 	}
 
-	public String getFriendlyURL(long userId) {
-		return (String)_userGroupIdsAndFriendlyURLs.get(userId)[1];
-	}
-
 	public long getGroupExpandoColumnId() {
 		return _groupExpandoColumnId;
 	}
@@ -121,11 +117,7 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public long getGroupId(long userId) {
-		return (Long)_userGroupIdsAndFriendlyURLs.get(userId)[0];
-	}
-
-	public List<GroupModel> getLayoutSetPrototypeGroupModels() {
-		return _layoutSetPrototypeGroupModels;
+		return _userGroupIds.get(userId);
 	}
 
 	public String getGroupTypeSettings() {
@@ -139,6 +131,10 @@ public class SODataFactory extends DataFactory {
 
 	public List<LayoutSetModel> getLayoutSetModels() {
 		return _layoutSetModels;
+	}
+
+	public List<GroupModel> getLayoutSetPrototypeGroupModels() {
+		return _layoutSetPrototypeGroupModels;
 	}
 
 	public List<LayoutSetPrototypeModel> getLayoutSetPrototypeModels() {
@@ -178,7 +174,7 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public Set<Long> getUserIds() {
-		return _userGroupIdsAndFriendlyURLs.keySet();
+		return _userGroupIds.keySet();
 	}
 
 	public List<LayoutModel> getUserLayoutModels() {
@@ -262,11 +258,7 @@ public class SODataFactory extends DataFactory {
 	public GroupModel newGroupModel(UserModel userModel) throws Exception {
 		GroupModel groupModel = super.newGroupModel(userModel);
 
-		Object[] groupIdAndFriendlyURL = new Object[]
-			{groupModel.getGroupId(), groupModel.getFriendlyURL()};
-
-		_userGroupIdsAndFriendlyURLs.put(
-			userModel.getUserId(), groupIdAndFriendlyURL);
+		_userGroupIds.put(userModel.getUserId(), groupModel.getGroupId());
 
 		return groupModel;
 	}
@@ -693,8 +685,6 @@ public class SODataFactory extends DataFactory {
 		new ArrayList<ExpandoValueModel>();
 	private long _groupExpandoColumnId;
 	private long _groupExpandoTableId;
-	private List<GroupModel> _layoutSetPrototypeGroupModels =
-		new ArrayList<GroupModel>();
 	private String _groupTypeSettings = "customJspServletContextName=so-hook";
 	private List<LayoutSetModel> _layoutSetModels =
 		new ArrayList<LayoutSetModel>();
@@ -702,6 +692,8 @@ public class SODataFactory extends DataFactory {
 		LayoutSetPrototype.class.getName());
 	private long _layoutSetPrototypeExpandoColumnId;
 	private long _layoutSetPrototypeExpandoTableId;
+	private List<GroupModel> _layoutSetPrototypeGroupModels =
+		new ArrayList<GroupModel>();
 	private List<LayoutSetPrototypeModel> _layoutSetPrototypeModels =
 		new ArrayList<LayoutSetPrototypeModel>();
 	private LayoutSetPrototypeModel _layoutSetPrototypeSiteModel;
@@ -712,8 +704,7 @@ public class SODataFactory extends DataFactory {
 	private long _siteLayoutSetPrototypeId;
 	private RoleModel _soUserRoleModel;
 	private long _userClassNameId = getClassNameId(User.class.getName());
-	private Map<Long, Object[]> _userGroupIdsAndFriendlyURLs =
-		new HashMap<Long, Object[]>();
+	private Map<Long, Long> _userGroupIds = new HashMap<Long, Long>();
 	private List<LayoutModel> _userLayoutModels = new ArrayList<LayoutModel>();
 	private long _userPrivateLayoutSetPrototypeGroupId;
 	private long _userPrivateLayoutSetPrototypeId;

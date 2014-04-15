@@ -26,21 +26,19 @@
 <#macro updateGroup
 	_userId
 >
-	<#local treePath = dataFactory.getFriendlyURL(_userId) + "/">
-
-	update Group_ set mvccVersion=0, uuid_='${dataFactory.getUUID()}',  companyId=${dataFactory.companyId}, creatorUserId=${_userId}, classNameId=${dataFactory.userClassNameId}, classPK=${_userId}, parentGroupId=0, liveGroupId=0, treePath='${treePath}', name='${_userId}', description='', type_=0, typeSettings='${dataFactory.groupTypeSettings}', manualMembership=1, membershipRestriction=0, friendlyURL='${dataFactory.getFriendlyURL(_userId)}', site=0, remoteStagingGroupCount=0, active_=1 where groupId=${dataFactory.getGroupId(_userId)};
+	update Group_ set typeSettings='${dataFactory.groupTypeSettings}' where groupId=${dataFactory.getGroupId(_userId)};
 </#macro>
 
 <#macro updateUserLayoutSet
 	_userId
 >
-	<#local layoutSetPrototypeUserPrivate = dataFactory.layoutSetPrototypeUserPrivateModel>
+	<#local layoutSetPrototypeUserPrivateModel = dataFactory.layoutSetPrototypeUserPrivateModel>
 
-	update LayoutSet set mvccVersion = 0, layoutSetId=${dataFactory.getCounterNext()}, companyId=${dataFactory.companyId}, createDate='${dataFactory.getDate()}', modifiedDate='${dataFactory.getDate()}', privateLayout=1, logoId=0, themeId='${dataFactory.themeId}', colorSchemeId='${dataFactory.colorSchemeId}', wapThemeId='mobile', wapColorSchemeId='01', css='', pageCount=7, settings_='${dataFactory.getSOTypeSettings()}', layoutSetPrototypeUuid='${layoutSetPrototypeUserPrivate.uuid}', layoutSetPrototypeLinkEnabled=1 where groupId=${dataFactory.getGroupId(_userId)} and privateLayout=1;
+	update LayoutSet set  themeId='${dataFactory.themeId}', colorSchemeId='${dataFactory.colorSchemeId}', pageCount = 7, settings_='${dataFactory.getSOTypeSettings()}', layoutSetPrototypeUuid='${layoutSetPrototypeUserPrivateModel.uuid}', layoutSetPrototypeLinkEnabled=1 where groupId=${dataFactory.getGroupId(_userId)} and privateLayout=1;
 
-	<#local layoutSetPrototypeUserPublic = dataFactory.layoutSetPrototypeUserPublicModel>
+	<#local layoutSetPrototypeUserPublicModel = dataFactory.layoutSetPrototypeUserPublicModel>
 
-	update LayoutSet set mvccVersion = 0, layoutSetId=${dataFactory.getCounterNext()}, companyId=${dataFactory.companyId}, createDate='${dataFactory.getDate()}', modifiedDate='${dataFactory.getDate()}', privateLayout=0, logoId=0, themeId='${dataFactory.themeId}', colorSchemeId='${dataFactory.colorSchemeId}', wapThemeId='mobile', wapColorSchemeId='01', css='', pageCount=7, settings_='${dataFactory.getSOTypeSettings()}', layoutSetPrototypeUuid='${layoutSetPrototypeUserPublic.uuid}', layoutSetPrototypeLinkEnabled=1 where groupId=${dataFactory.getGroupId(_userId)} and privateLayout=0;
+	update LayoutSet set  themeId='${dataFactory.themeId}', colorSchemeId='${dataFactory.colorSchemeId}', pageCount = 4, settings_='${dataFactory.getSOTypeSettings()}', layoutSetPrototypeUuid='${layoutSetPrototypeUserPrivateModel.uuid}', layoutSetPrototypeLinkEnabled=1 where groupId=${dataFactory.getGroupId(_userId)} and privateLayout=0;
 </#macro>
 
 <#macro updateUserLayouts
