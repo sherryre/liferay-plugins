@@ -3,7 +3,7 @@
 </#list>
 
 <#list dataFactory.expandoRowModels as expandoRowModel>
-	insert into ExpandoRow values (${expandoRowModel.rowId}, ${expandoRowModel.companyId}, ${dataFactory.getDateString(expandoRowModel.modifiedDate)}, ${expandoRowModel.tableId}, ${expandoRowModel.classPK});
+	insert into ExpandoRow values (${expandoRowModel.rowId}, ${expandoRowModel.companyId}, '${dataFactory.getDateString(expandoRowModel.modifiedDate)}', ${expandoRowModel.tableId}, ${expandoRowModel.classPK});
 </#list>
 
 <#list dataFactory.expandoTableModels as expandoTableModel>
