@@ -124,9 +124,8 @@ public class SODataFactory extends DataFactory {
 		return (Long)_userGroupIdsAndFriendlyURLs.get(userId)[0];
 	}
 
-	@Override
-	public List<GroupModel> getGroupModels() {
-		return _groupModels;
+	public List<GroupModel> getLayoutSetPrototypeGroupModels() {
+		return _layoutSetPrototypeGroupModels;
 	}
 
 	public String getGroupTypeSettings() {
@@ -321,15 +320,18 @@ public class SODataFactory extends DataFactory {
 	}
 
 	protected LayoutModel newLayoutModel(
-		long groupId, String name, String templateId, String column1,
-		String column2) {
+		long groupId, String name, boolean privateLayout, String templateId,
+		String column1, String column2) {
 
 		LayoutModel layoutModel = newLayoutModel(
 			groupId, name, StringPool.BLANK, StringPool.BLANK);
 
+		layoutModel.setPrivateLayout(privateLayout);
+
+		layoutModel.setFriendlyURL("/so/" + name);
+
 		UnicodeProperties typeSettingsProperties = new UnicodeProperties(true);
 
-		typeSettingsProperties.setProperty("privateLayout", StringPool.TRUE);
 		typeSettingsProperties.setProperty(
 			LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID, templateId);
 		typeSettingsProperties.setProperty("column-1", column1);
@@ -438,7 +440,7 @@ public class SODataFactory extends DataFactory {
 
 		_siteLayoutSetPrototypeGroupId = getCounterNext();
 
-		_groupModels.add(
+		_layoutSetPrototypeGroupModels.add(
 			newGroupModel(
 				_siteLayoutSetPrototypeGroupId, _layoutSetPrototypeClassNameId,
 				_siteLayoutSetPrototypeId,
@@ -467,15 +469,15 @@ public class SODataFactory extends DataFactory {
 		//Home
 
 		LayoutModel homeLayoutModel = newLayoutModel(
-			_siteLayoutSetPrototypeGroupId, "Home", "2_columns_iii", column1,
-			sb.toString());
+			_siteLayoutSetPrototypeGroupId, "Home", true, "2_columns_iii",
+			column1, sb.toString());
 
 		_siteLayoutModels.add(homeLayoutModel);
 
 		// Calendar
 
 		LayoutModel calendarLayoutModel = newLayoutModel(
-			_siteLayoutSetPrototypeGroupId, "Calendar", "1_column",
+			_siteLayoutSetPrototypeGroupId, "Calendar", true, "1_column",
 			"1_WAR_calendarportlet", null);
 
 		_siteLayoutModels.add(calendarLayoutModel);
@@ -483,7 +485,7 @@ public class SODataFactory extends DataFactory {
 		// Documents
 
 		LayoutModel documentsLayoutModel = newLayoutModel(
-			_siteLayoutSetPrototypeGroupId, "Documents", "1_column",
+			_siteLayoutSetPrototypeGroupId, "Documents", true, "1_column",
 			PortletKeys.DOCUMENT_LIBRARY, null);
 
 		_siteLayoutModels.add(documentsLayoutModel);
@@ -495,7 +497,7 @@ public class SODataFactory extends DataFactory {
 				PortletKeys.MESSAGE_BOARDS;
 
 		LayoutModel forumsLayoutModel = newLayoutModel(
-			_siteLayoutSetPrototypeGroupId, "Forums", "1_column", column1,
+			_siteLayoutSetPrototypeGroupId, "Forums", true, "1_column", column1,
 			null);
 
 		_siteLayoutModels.add(forumsLayoutModel);
@@ -503,7 +505,7 @@ public class SODataFactory extends DataFactory {
 		// Blog
 
 		LayoutModel blogLayoutModel = newLayoutModel(
-			_siteLayoutSetPrototypeGroupId, "Blogs", "2_columns_iii",
+			_siteLayoutSetPrototypeGroupId, "Blogs", true, "2_columns_iii",
 			PortletKeys.BLOGS, PortletKeys.BLOGS_AGGREGATOR);
 
 		_siteLayoutModels.add(blogLayoutModel);
@@ -511,7 +513,7 @@ public class SODataFactory extends DataFactory {
 		// Wiki
 
 		LayoutModel wikiLayoutModel = newLayoutModel(
-			_siteLayoutSetPrototypeGroupId, "Wiki", "1_column",
+			_siteLayoutSetPrototypeGroupId, "Wiki", true, "1_column",
 			PortletKeys.WIKI, null);
 
 		_siteLayoutModels.add(wikiLayoutModel);
@@ -519,7 +521,7 @@ public class SODataFactory extends DataFactory {
 		// Members
 
 		LayoutModel memberLayoutModel = newLayoutModel(
-			_siteLayoutSetPrototypeGroupId, "Members", "1_column",
+			_siteLayoutSetPrototypeGroupId, "Members", true, "1_column",
 			PortletKeys.SO_INVITE_MEMBERS + ",4_WAR_contactsportlet", null);
 
 		_siteLayoutModels.add(memberLayoutModel);
@@ -550,12 +552,12 @@ public class SODataFactory extends DataFactory {
 
 		_userPrivateLayoutSetPrototypeGroupId = getCounterNext();
 
-		_groupModels.add(
+		_layoutSetPrototypeGroupModels.add(
 			newGroupModel(
 				_userPrivateLayoutSetPrototypeGroupId,
 				_layoutSetPrototypeClassNameId,
 				_userPrivateLayoutSetPrototypeId,
-				String.valueOf(_siteLayoutSetPrototypeId), false));
+				String.valueOf(_userPrivateLayoutSetPrototypeId), false));
 
 		newSOLayoutSetModel(_userPrivateLayoutSetPrototypeGroupId, true, 6);
 		newSOLayoutSetModel(_userPrivateLayoutSetPrototypeGroupId, false, 0);
@@ -563,7 +565,8 @@ public class SODataFactory extends DataFactory {
 		// Dashboard
 
 		LayoutModel dashboardLayoutModel = newLayoutModel(
-			_userPrivateLayoutSetPrototypeGroupId, "Dashboard", "2_columns_iii",
+			_userPrivateLayoutSetPrototypeGroupId, "Dashboard", true,
+			"2_columns_iii",
 			"2_WAR_microblogsportlet,1_WAR_soannouncementsportlet," +
 				"1_WAR_soportlet",
 			"2_WAR_tasksportlet,1_WAR_eventsdisplayportlet");
@@ -573,7 +576,7 @@ public class SODataFactory extends DataFactory {
 		// Contacts Center
 
 		LayoutModel contactsLayoutModel = newLayoutModel(
-			_userPrivateLayoutSetPrototypeGroupId, "Contacts Center",
+			_userPrivateLayoutSetPrototypeGroupId, "Contacts Center", true,
 			"1_column", "1_WAR_contactsportlet", null);
 
 		_userLayoutModels.add(contactsLayoutModel);
@@ -581,15 +584,15 @@ public class SODataFactory extends DataFactory {
 		// Microblogs
 
 		LayoutModel microblogsLayoutModel = newLayoutModel(
-			_userPrivateLayoutSetPrototypeGroupId, "Microblogs", "1_column",
-			"1_WAR_microblogsportlet", null);
+			_userPrivateLayoutSetPrototypeGroupId, "Microblogs", true,
+			"1_column", "1_WAR_microblogsportlet", null);
 
 		_userLayoutModels.add(microblogsLayoutModel);
 
 		// Messages
 
 		LayoutModel messagesLayoutModel = newLayoutModel(
-			_userPrivateLayoutSetPrototypeGroupId, "Messages", "1_column",
+			_userPrivateLayoutSetPrototypeGroupId, "Messages", true, "1_column",
 			"1_WAR_privatemessagingportlet", null);
 
 		_userLayoutModels.add(messagesLayoutModel);
@@ -597,15 +600,15 @@ public class SODataFactory extends DataFactory {
 		// Documents
 
 		LayoutModel documentsLayoutModel = newLayoutModel(
-			_userPrivateLayoutSetPrototypeGroupId, "Documents", "1_column",
-			PortletKeys.DOCUMENT_LIBRARY, null);
+			_userPrivateLayoutSetPrototypeGroupId, "Documents", true,
+			"1_column", PortletKeys.DOCUMENT_LIBRARY, null);
 
 		_userLayoutModels.add(documentsLayoutModel);
 
 		// Tasks
 
 		LayoutModel tasksLayoutModel = newLayoutModel(
-			_userPrivateLayoutSetPrototypeGroupId, "Tasks", "1_column",
+			_userPrivateLayoutSetPrototypeGroupId, "Tasks", true, "1_column",
 			"1_WAR_tasksportlet", null);
 
 		_userLayoutModels.add(tasksLayoutModel);
@@ -636,7 +639,7 @@ public class SODataFactory extends DataFactory {
 
 		_userPublicLayoutSetPrototypeGroupId = getCounterNext();
 
-		_groupModels.add(
+		_layoutSetPrototypeGroupModels.add(
 			newGroupModel(
 				_userPublicLayoutSetPrototypeGroupId,
 				_layoutSetPrototypeClassNameId, _userPublicLayoutSetPrototypeId,
@@ -648,8 +651,8 @@ public class SODataFactory extends DataFactory {
 		// Profile
 
 		LayoutModel profileLayoutModel = newLayoutModel(
-			_userPublicLayoutSetPrototypeGroupId, "Profile", "1_2_columns_ii",
-			"2_WAR_contactsportlet_INSTANCE_abcd",
+			_userPublicLayoutSetPrototypeGroupId, "Profile", false,
+			"1_2_columns_ii", "2_WAR_contactsportlet_INSTANCE_abcd",
 			"2_WAR_microblogsportlet,2_WAR_contactsportlet_INSTANCE_efgh," +
 				PortletKeys.SO_ACTIVITIES);
 
@@ -658,7 +661,7 @@ public class SODataFactory extends DataFactory {
 		// Contacts
 
 		LayoutModel contactsLayoutModel = newLayoutModel(
-			_userPublicLayoutSetPrototypeGroupId, "Contacts", "1_column",
+			_userPublicLayoutSetPrototypeGroupId, "Contacts", false, "1_column",
 			"2_WAR_contactsportlet_INSTANCE_abcd,1_WAR_contactsportlet", null);
 
 		_userLayoutModels.add(contactsLayoutModel);
@@ -666,7 +669,8 @@ public class SODataFactory extends DataFactory {
 		// Microblogs
 
 		LayoutModel MicroblogsModel = newLayoutModel(
-			_userPublicLayoutSetPrototypeGroupId, "Microblogs", "1_column",
+			_userPublicLayoutSetPrototypeGroupId, "Microblogs", false,
+			"1_column",
 			"2_WAR_contactsportlet_INSTANCE_abcd,1_WAR_microblogsportlet",
 			null);
 
@@ -689,7 +693,8 @@ public class SODataFactory extends DataFactory {
 		new ArrayList<ExpandoValueModel>();
 	private long _groupExpandoColumnId;
 	private long _groupExpandoTableId;
-	private List<GroupModel> _groupModels = new ArrayList<GroupModel>();
+	private List<GroupModel> _layoutSetPrototypeGroupModels =
+		new ArrayList<GroupModel>();
 	private String _groupTypeSettings = "customJspServletContextName=so-hook";
 	private List<LayoutSetModel> _layoutSetModels =
 		new ArrayList<LayoutSetModel>();
