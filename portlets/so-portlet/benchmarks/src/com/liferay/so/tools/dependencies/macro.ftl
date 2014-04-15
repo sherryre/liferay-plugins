@@ -3,7 +3,7 @@
 <#macro insertRole
 	_userId
 >
-	insert into users_roles values(${_userId}, ${soUserRoleModel.roleId});
+	insert into Users_Roles values (${_userId}, ${soUserRoleModel.roleId});
 </#macro>
 
 <#macro insertExpando
@@ -18,7 +18,7 @@
 	insert into ExpandoRow values (${userExpandoRowModel.rowId}, ${userExpandoRowModel.companyId}, '${dataFactory.getDateString(userExpandoRowModel.modifiedDate)}', ${userExpandoRowModel.tableId}, ${userExpandoRowModel.classPK});
 
 	<#local valueId = dataFactory.getCounterNext()>
-	<#local userExpandoValueModel = dataFactory.newExpandoValueModel(valueId, groupExpandoTableId, groupExpandoColumnId, rowId, groupId, dataFactory.getGroupClassNameId(), "true")>
+	<#local userExpandoValueModel = dataFactory.newExpandoValueModel(valueId, groupExpandoTableId, groupExpandoColumnId, rowId, dataFactory.getGroupClassNameId(), groupId, "true")>
 
 	insert into ExpandoValue values (${userExpandoValueModel.valueId}, ${userExpandoValueModel.companyId}, ${userExpandoValueModel.tableId}, ${userExpandoValueModel.columnId}, ${userExpandoValueModel.rowId}, ${userExpandoValueModel.classNameId}, ${userExpandoValueModel.classPK}, '${userExpandoValueModel.data}');
 </#macro>
@@ -36,11 +36,11 @@
 >
 	<#local layoutSetPrototypeUserPrivate = dataFactory.layoutSetPrototypeUserPrivateModel>
 
-	update LayoutSet set mvccVersion = 0, layoutSetId=${dataFactory.getCounterNext()}, groupId=${dataFactory.getGroupId(_userId)}, companyId=${dataFactory.companyId}, createDate='${dataFactory.getDate()}', modifiedDate='${dataFactory.getDate()}', privateLayout=1, logoId=0, themeId='${dataFactory.themeId}', colorSchemeId='${dataFactory.colorSchemeId}', wapThemeId='mobile', wapColorSchemeId='01', css='', pageCount=7, settings_='${dataFactory.getSOTypeSettings()}', layoutSetPrototypeUuid='${layoutSetPrototypeUserPrivate.uuid}', layoutSetPrototypeLinkEnabled=1 where groupId=${dataFactory.getGroupId(_userId)} and privateLayout=1;
+	update LayoutSet set mvccVersion = 0, layoutSetId=${dataFactory.getCounterNext()}, companyId=${dataFactory.companyId}, createDate='${dataFactory.getDate()}', modifiedDate='${dataFactory.getDate()}', privateLayout=1, logoId=0, themeId='${dataFactory.themeId}', colorSchemeId='${dataFactory.colorSchemeId}', wapThemeId='mobile', wapColorSchemeId='01', css='', pageCount=7, settings_='${dataFactory.getSOTypeSettings()}', layoutSetPrototypeUuid='${layoutSetPrototypeUserPrivate.uuid}', layoutSetPrototypeLinkEnabled=1 where groupId=${dataFactory.getGroupId(_userId)} and privateLayout=1;
 
 	<#local layoutSetPrototypeUserPublic = dataFactory.layoutSetPrototypeUserPublicModel>
 
-	update LayoutSet set mvccVersion = 0, layoutSetId=${dataFactory.getCounterNext()}, groupId=${dataFactory.getGroupId(_userId)}, companyId=${dataFactory.companyId}, createDate='${dataFactory.getDate()}', modifiedDate='${dataFactory.getDate()}', privateLayout=1, logoId=0, themeId='${dataFactory.themeId}', colorSchemeId='${dataFactory.colorSchemeId}', wapThemeId='mobile', wapColorSchemeId='01', css='', pageCount=7, settings_='${dataFactory.getSOTypeSettings()}', layoutSetPrototypeUuid='${layoutSetPrototypeUserPublic.uuid}', layoutSetPrototypeLinkEnabled=1 where groupId=${dataFactory.getGroupId(_userId)} and privateLayout=0;
+	update LayoutSet set mvccVersion = 0, layoutSetId=${dataFactory.getCounterNext()}, companyId=${dataFactory.companyId}, createDate='${dataFactory.getDate()}', modifiedDate='${dataFactory.getDate()}', privateLayout=0, logoId=0, themeId='${dataFactory.themeId}', colorSchemeId='${dataFactory.colorSchemeId}', wapThemeId='mobile', wapColorSchemeId='01', css='', pageCount=7, settings_='${dataFactory.getSOTypeSettings()}', layoutSetPrototypeUuid='${layoutSetPrototypeUserPublic.uuid}', layoutSetPrototypeLinkEnabled=1 where groupId=${dataFactory.getGroupId(_userId)} and privateLayout=0;
 </#macro>
 
 <#macro updateUserLayouts
@@ -52,7 +52,7 @@
 		<#local plid = dataFactory.getCounterNext()>
 		<#local typeSettings = dataFactory.getSOTypeSettings() + " " + userLayoutModel.typeSettings>
 
-		insert into layout values (0, '${userLayoutModel.uuid}', ${plid}, ${groupId}, ${userLayoutModel.companyId}, 0, '', null, null, '${userLayoutModel.privateLayout?string}', ${dataFactory.getCounterNext()}, ${userLayoutModel.parentLayoutId}, '${userLayoutModel.name}', '', '', '', '', '${userLayoutModel.type}', '${typeSettings}', '${userLayoutModel.hidden?string}', '${userLayoutModel.friendlyURL}', ${userLayoutModel.iconImageId}, '${userLayoutModel.themeId}', '${userLayoutModel.colorSchemeId}', '${userLayoutModel.wapThemeId}', '${userLayoutModel.wapColorSchemeId}', '${userLayoutModel.css}', ${userLayoutModel.priority}, '${userLayoutModel.layoutPrototypeUuid}', '${userLayoutModel.layoutPrototypeLinkEnabled?string}', '${userLayoutModel.uuid}');
-		insert into layoutFriendlyURL values (0, '${dataFactory.getUUID()}', ${dataFactory.getCounterNext()},${groupId}, ${dataFactory.companyId}, ${_userId}, '', '${dataFactory.getDate()}', '${dataFactory.getDate()}', ${plid}, '${userLayoutModel.privateLayout?string}', '${userLayoutModel.friendlyURL}', 'en_US');
+		insert into layout values (${userLayoutModel.mvccVersion}, '${userLayoutModel.uuid}', ${plid}, ${groupId}, ${userLayoutModel.companyId}, 0, '', '${dataFactory.getDateString(userLayoutModel.createDate)}', '${dataFactory.getDateString(userLayoutModel.modifiedDate)}', ${userLayoutModel.privateLayout?string}, ${dataFactory.getCounterNext()}, ${userLayoutModel.parentLayoutId}, '${userLayoutModel.name}', '', '', '', '', '${userLayoutModel.type}', '${typeSettings}', ${userLayoutModel.hidden?string}, '${userLayoutModel.friendlyURL}', ${userLayoutModel.iconImageId}, '${userLayoutModel.themeId}', '${userLayoutModel.colorSchemeId}', '${userLayoutModel.wapThemeId}', '${userLayoutModel.wapColorSchemeId}', '${userLayoutModel.css}', ${userLayoutModel.priority}, '${userLayoutModel.layoutPrototypeUuid}', ${userLayoutModel.layoutPrototypeLinkEnabled?string}, '${userLayoutModel.uuid}');
+		insert into layoutFriendlyURL values (${userLayoutModel.mvccVersion}, '${dataFactory.getUUID()}', ${dataFactory.getCounterNext()},${groupId}, ${dataFactory.companyId}, ${_userId}, '', '${dataFactory.getDate()}', '${dataFactory.getDate()}', ${plid}, '${userLayoutModel.privateLayout?string}', '${userLayoutModel.friendlyURL}', 'en_US');
 	</#list>
 </#macro>
