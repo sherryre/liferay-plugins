@@ -20,7 +20,7 @@
 <#macro insertRole
 	_userId
 >
-	insert into Users_Roles values (${_userId}, ${soUserRoleModel.roleId});
+	insert into Users_Roles values (${soUserRoleModel.roleId}, ${_userId});
 </#macro>
 
 <#macro insertResourcePermissions
@@ -48,7 +48,7 @@
 		<#local userLayoutModel = dataFactory.newUserLayoutModel(groupId, userSourcePrototypeLayoutModel)>
 
 		insert into Layout values (${userLayoutModel.mvccVersion}, '${userLayoutModel.uuid}', ${userLayoutModel.plid}, ${userLayoutModel.groupId}, ${userLayoutModel.companyId}, ${userLayoutModel.userId}, '${userLayoutModel.userName}', '${dataFactory.getDateString(userLayoutModel.createDate)}', '${dataFactory.getDateString(userLayoutModel.modifiedDate)}', ${userLayoutModel.privateLayout?string}, ${userLayoutModel.layoutId}, ${userLayoutModel.parentLayoutId}, '${userLayoutModel.name}', '${userLayoutModel.title}', '${userLayoutModel.description}', '${userLayoutModel.keywords}', '${userLayoutModel.robots}', '${userLayoutModel.type}', '${userLayoutModel.typeSettings}', ${userLayoutModel.hidden?string}, '${userLayoutModel.friendlyURL}', ${userLayoutModel.iconImageId}, '${userLayoutModel.themeId}', '${userLayoutModel.colorSchemeId}', '${userLayoutModel.wapThemeId}', '${userLayoutModel.wapColorSchemeId}', '${userLayoutModel.css}', ${userLayoutModel.priority}, '${userLayoutModel.layoutPrototypeUuid}', ${userLayoutModel.layoutPrototypeLinkEnabled?string}, '${userLayoutModel.sourcePrototypeLayoutUuid}');
-		insert into layoutFriendlyURL values (${userLayoutModel.mvccVersion}, '${dataFactory.getUUID()}', ${dataFactory.getCounterNext()}, ${groupId}, ${dataFactory.companyId}, ${_userId}, '', '${dataFactory.getDate()}', '${dataFactory.getDate()}', ${userLayoutModel.plid}, '${userLayoutModel.privateLayout?string}', '${userLayoutModel.friendlyURL}', 'en_US');
+		insert into LayoutFriendlyURL values (${userLayoutModel.mvccVersion}, '${dataFactory.getUUID()}', ${dataFactory.getCounterNext()}, ${groupId}, ${dataFactory.companyId}, ${_userId}, '', '${dataFactory.getDate()}', '${dataFactory.getDate()}', ${userLayoutModel.plid}, ${userLayoutModel.privateLayout?string}, '${userLayoutModel.friendlyURL}', 'en_US');
 
 		<@insertResourcePermissions
 			_entry = userLayoutModel
