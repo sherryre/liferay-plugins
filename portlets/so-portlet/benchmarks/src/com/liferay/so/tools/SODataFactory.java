@@ -540,7 +540,7 @@ public class SODataFactory extends DataFactory {
 
 		_layoutSetPrototypeUserPrivateModel = newLayoutSetPrototypeModel(
 			_userPrivateLayoutSetPrototypeId, _defaultUserId,
-			"Social Office User Home", StringPool.BLANK, true);
+			"Social Office User Private Home", StringPool.BLANK, true);
 
 		long expandoRowId = getCounterNext();
 
@@ -627,7 +627,7 @@ public class SODataFactory extends DataFactory {
 
 		_layoutSetPrototypeUserPublicModel = newLayoutSetPrototypeModel(
 			_userPublicLayoutSetPrototypeId, _defaultUserId,
-			"Social Office User Home", StringPool.BLANK, true);
+			"Social Office User Public Home", StringPool.BLANK, true);
 
 		long expandoRowId = getCounterNext();
 
