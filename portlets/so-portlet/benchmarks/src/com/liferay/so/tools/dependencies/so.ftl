@@ -12,4 +12,6 @@
 
 <#include "users.ftl">
 
+<#include "releases.ftl">
+
 COMMIT_TRANSACTION
