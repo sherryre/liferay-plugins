@@ -339,7 +339,10 @@ public class SODataFactory extends DataFactory {
 
 		layoutModel.setPrivateLayout(privateLayout);
 
-		layoutModel.setFriendlyURL("/so/" + name);
+		String friendlyURL = StringUtil.lowerCase(
+			StringUtil.replace(name, StringPool.SPACE, StringPool.DASH));
+
+		layoutModel.setFriendlyURL("/so/" + friendlyURL);
 
 		UnicodeProperties typeSettingsProperties = new UnicodeProperties(true);
 
