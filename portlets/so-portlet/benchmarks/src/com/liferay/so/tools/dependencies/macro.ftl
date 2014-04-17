@@ -6,6 +6,16 @@
 	insert into Users_Roles values (${soUserRoleModel.roleId}, ${_userId});
 </#macro>
 
+<#macro insertResourcePermissions
+	_entry
+>
+	<#local resourcePermissionModels = dataFactory.newResourcePermissionModels(_entry)>
+
+	<#list resourcePermissionModels as resourcePermissionModel>
+		insert into ResourcePermission values (${resourcePermissionModel.mvccVersion}, ${resourcePermissionModel.resourcePermissionId}, ${resourcePermissionModel.companyId}, '${resourcePermissionModel.name}', ${resourcePermissionModel.scope}, '${resourcePermissionModel.primKey}', ${resourcePermissionModel.roleId}, ${resourcePermissionModel.ownerId}, ${resourcePermissionModel.actionIds});
+	</#list>
+</#macro>
+
 <#macro insertExpando
 	_userId
 >
@@ -46,11 +56,14 @@
 >
 	<#local groupId = dataFactory.getGroupId(_userId)>
 
-	<#list dataFactory.userLayoutModels as userLayoutModel>
-		<#local plid = dataFactory.getCounterNext()>
-		<#local typeSettings = dataFactory.getSOTypeSettings() + " " + userLayoutModel.typeSettings>
+	<#list dataFactory.userSourcePrototypeLayoutModels as userSourcePrototypeLayoutModel>
+		<#local userLayoutModel = dataFactory.newUserLayoutModel(groupId, userSourcePrototypeLayoutModel)>
 
-		insert into Layout values (${userLayoutModel.mvccVersion}, '${userLayoutModel.uuid}', ${plid}, ${groupId}, ${userLayoutModel.companyId}, 0, '', '${dataFactory.getDateString(userLayoutModel.createDate)}', '${dataFactory.getDateString(userLayoutModel.modifiedDate)}', ${userLayoutModel.privateLayout?string}, ${dataFactory.getCounterNext()}, ${userLayoutModel.parentLayoutId}, '${userLayoutModel.name}', '', '', '', '', '${userLayoutModel.type}', '${typeSettings}', ${userLayoutModel.hidden?string}, '${userLayoutModel.friendlyURL}', ${userLayoutModel.iconImageId}, '${userLayoutModel.themeId}', '${userLayoutModel.colorSchemeId}', '${userLayoutModel.wapThemeId}', '${userLayoutModel.wapColorSchemeId}', '${userLayoutModel.css}', ${userLayoutModel.priority}, '${userLayoutModel.layoutPrototypeUuid}', ${userLayoutModel.layoutPrototypeLinkEnabled?string}, '${userLayoutModel.uuid}');
-		insert into LayoutFriendlyURL values (${userLayoutModel.mvccVersion}, '${dataFactory.getUUID()}', ${dataFactory.getCounterNext()},${groupId}, ${dataFactory.companyId}, ${_userId}, '', '${dataFactory.getDate()}', '${dataFactory.getDate()}', ${plid}, '${userLayoutModel.privateLayout?string}', '${userLayoutModel.friendlyURL}', 'en_US');
+		insert into Layout values (${userLayoutModel.mvccVersion}, '${userLayoutModel.uuid}', ${userLayoutModel.plid}, ${userLayoutModel.groupId}, ${userLayoutModel.companyId}, ${userLayoutModel.userId}, '${userLayoutModel.userName}', '${dataFactory.getDateString(userLayoutModel.createDate)}', '${dataFactory.getDateString(userLayoutModel.modifiedDate)}', ${userLayoutModel.privateLayout?string}, ${userLayoutModel.layoutId}, ${userLayoutModel.parentLayoutId}, '${userLayoutModel.name}', '${userLayoutModel.title}', '${userLayoutModel.description}', '${userLayoutModel.keywords}', '${userLayoutModel.robots}', '${userLayoutModel.type}', '${userLayoutModel.typeSettings}', ${userLayoutModel.hidden?string}, '${userLayoutModel.friendlyURL}', ${userLayoutModel.iconImageId}, '${userLayoutModel.themeId}', '${userLayoutModel.colorSchemeId}', '${userLayoutModel.wapThemeId}', '${userLayoutModel.wapColorSchemeId}', '${userLayoutModel.css}', ${userLayoutModel.priority}, '${userLayoutModel.layoutPrototypeUuid}', ${userLayoutModel.layoutPrototypeLinkEnabled?string}, '${userLayoutModel.sourcePrototypeLayoutUuid}');
+		insert into LayoutFriendlyURL values (${userLayoutModel.mvccVersion}, '${dataFactory.getUUID()}', ${dataFactory.getCounterNext()}, ${groupId}, ${dataFactory.companyId}, ${_userId}, '', '${dataFactory.getDate()}', '${dataFactory.getDate()}', ${userLayoutModel.plid}, ${userLayoutModel.privateLayout?string}, '${userLayoutModel.friendlyURL}', 'en_US');
+
+		<@insertResourcePermissions
+			_entry = userLayoutModel
+		/>
 	</#list>
 </#macro>
