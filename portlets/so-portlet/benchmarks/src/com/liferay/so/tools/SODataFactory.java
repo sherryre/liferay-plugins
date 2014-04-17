@@ -74,14 +74,14 @@ public class SODataFactory extends DataFactory {
 		_defaultUserId = defaultUserModel.getUserId();
 
 		initExpandos();
-		initSOUserRoleModel();
 
 		initLayoutSetPrototype();
 		initReleases();
+		initSOUserRoleModel();
 	}
 
 	public int getBuildNumber(String key) {
-		return _releaseModels.get(key);
+		return _buildNumbers.get(key);
 	}
 
 	public String getColorSchemeId() {
@@ -125,7 +125,7 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public String getGroupTypeSettings() {
-		return _groupTypeSettings;
+		return _GROUP_TYPE_SETTINGS;
 	}
 
 	public List<LayoutModel> getLayoutModels() {
@@ -158,7 +158,7 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public Set<String> getServletContextNames() {
-		return _releaseModels.keySet();
+		return _buildNumbers.keySet();
 	}
 
 	public List<LayoutModel> getSiteLayoutModels() {
@@ -222,11 +222,11 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public void initReleases() {
-		_releaseModels.put("contacts-portlet", 200);
-		_releaseModels.put("marketplace-portlet", 100);
-		_releaseModels.put("private-messaging-portlet", 101);
-		_releaseModels.put("so-activities-hook", 101);
-		_releaseModels.put("so-hook", 300);
+		_buildNumbers.put("contacts-portlet", 200);
+		_buildNumbers.put("marketplace-portlet", 100);
+		_buildNumbers.put("private-messaging-portlet", 101);
+		_buildNumbers.put("so-activities-hook", 101);
+		_buildNumbers.put("so-hook", 300);
 	}
 
 	public void initSOUserRoleModel() {
@@ -357,6 +357,20 @@ public class SODataFactory extends DataFactory {
 		return layoutModel;
 	}
 
+	protected GroupModel newLayoutSetPrototypeGroupModel(
+			long groupId, long classNameId, long classPK, String name,
+			boolean site)
+		throws Exception {
+
+		GroupModel groupModel = super.newGroupModel(
+			groupId, classNameId, classPK, name, site);
+
+		groupModel.setTypeSettings(_GROUP_TYPE_SETTINGS);
+		groupModel.setFriendlyURL("/template-" + groupModel.getGroupId());
+
+		return groupModel;
+	}
+
 	protected LayoutSetPrototypeModel newLayoutSetPrototypeModel(
 		long layoutSetPrototypeId, long userId, String name, String description,
 		boolean active) {
@@ -424,20 +438,6 @@ public class SODataFactory extends DataFactory {
 		return layoutSetModel;
 	}
 
-	protected GroupModel newTemplateGroupModel(
-			long groupId, long classNameId, long classPK, String name,
-			boolean site)
-		throws Exception {
-
-		GroupModel groupModel = super.newGroupModel(
-			groupId, classNameId, classPK, name, site);
-
-		groupModel.setTypeSettings(_groupTypeSettings);
-		groupModel.setFriendlyURL("/template-" + groupModel.getGroupId());
-
-		return groupModel;
-	}
-
 	protected void setupLayoutSetPrototypeSite() throws Exception {
 		_siteLayoutSetPrototypeId = getCounterNext();
 
@@ -464,7 +464,7 @@ public class SODataFactory extends DataFactory {
 		_siteLayoutSetPrototypeGroupId = getCounterNext();
 
 		_layoutSetPrototypeGroupModels.add(
-			newTemplateGroupModel(
+			newLayoutSetPrototypeGroupModel(
 				_siteLayoutSetPrototypeGroupId, _layoutSetPrototypeClassNameId,
 				_siteLayoutSetPrototypeId,
 				String.valueOf(_siteLayoutSetPrototypeId), false));
@@ -576,7 +576,7 @@ public class SODataFactory extends DataFactory {
 		_userPrivateLayoutSetPrototypeGroupId = getCounterNext();
 
 		_layoutSetPrototypeGroupModels.add(
-			newTemplateGroupModel(
+			newLayoutSetPrototypeGroupModel(
 				_userPrivateLayoutSetPrototypeGroupId,
 				_layoutSetPrototypeClassNameId,
 				_userPrivateLayoutSetPrototypeId,
@@ -663,7 +663,7 @@ public class SODataFactory extends DataFactory {
 		_userPublicLayoutSetPrototypeGroupId = getCounterNext();
 
 		_layoutSetPrototypeGroupModels.add(
-			newTemplateGroupModel(
+			newLayoutSetPrototypeGroupModel(
 				_userPublicLayoutSetPrototypeGroupId,
 				_layoutSetPrototypeClassNameId, _userPublicLayoutSetPrototypeId,
 				String.valueOf(_userPublicLayoutSetPrototypeId), false));
@@ -702,8 +702,12 @@ public class SODataFactory extends DataFactory {
 
 	private static final String _COLOR_SCHEME_ID = "01";
 
+	private static final String _GROUP_TYPE_SETTINGS =
+		"customJspServletContextName=so-hook";
+
 	private static final String _THEME_ID = "so_WAR_sotheme";
 
+	private Map<String, Integer> _buildNumbers = new HashMap<String, Integer>();
 	private long _companyId;
 	private long _defaultUserId;
 	private List<ExpandoColumnModel> _expandoColumnModels =
@@ -716,7 +720,6 @@ public class SODataFactory extends DataFactory {
 		new ArrayList<ExpandoValueModel>();
 	private long _groupExpandoColumnId;
 	private long _groupExpandoTableId;
-	private String _groupTypeSettings = "customJspServletContextName=so-hook";
 	private List<LayoutSetModel> _layoutSetModels =
 		new ArrayList<LayoutSetModel>();
 	private long _layoutSetPrototypeClassNameId = getClassNameId(
@@ -730,8 +733,6 @@ public class SODataFactory extends DataFactory {
 	private LayoutSetPrototypeModel _layoutSetPrototypeSiteModel;
 	private LayoutSetPrototypeModel _layoutSetPrototypeUserPrivateModel;
 	private LayoutSetPrototypeModel _layoutSetPrototypeUserPublicModel;
-	private Map<String, Integer> _releaseModels =
-		new HashMap<String, Integer>();
 	private List<LayoutModel> _siteLayoutModels = new ArrayList<LayoutModel>();
 	private long _siteLayoutSetPrototypeGroupId;
 	private long _siteLayoutSetPrototypeId;

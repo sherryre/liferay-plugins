@@ -8,10 +8,10 @@
 
 <#include "layouts.ftl">
 
+<#include "releases.ftl">
+
 <#include "roles.ftl">
 
 <#include "users.ftl">
-
-<#include "releases.ftl">
 
 COMMIT_TRANSACTION
