@@ -40,3 +40,17 @@
 
 	update LayoutSet set themeId='${dataFactory.themeId}', colorSchemeId='${dataFactory.colorSchemeId}', pageCount = 4, settings_='${dataFactory.getSOTypeSettings()}', layoutSetPrototypeUuid='${layoutSetPrototypeUserPrivateModel.uuid}', layoutSetPrototypeLinkEnabled=1 where groupId=${dataFactory.getGroupId(_userId)} and privateLayout=0;
 </#macro>
+
+<#macro updateUserLayouts
+	_userId
+>
+	<#local groupId = dataFactory.getGroupId(_userId)>
+
+	<#list dataFactory.userLayoutModels as userLayoutModel>
+		<#local plid = dataFactory.getCounterNext()>
+		<#local typeSettings = dataFactory.getSOTypeSettings() + " " + userLayoutModel.typeSettings>
+
+		insert into Layout values (${userLayoutModel.mvccVersion}, '${userLayoutModel.uuid}', ${plid}, ${groupId}, ${userLayoutModel.companyId}, 0, '', '${dataFactory.getDateString(userLayoutModel.createDate)}', '${dataFactory.getDateString(userLayoutModel.modifiedDate)}', ${userLayoutModel.privateLayout?string}, ${dataFactory.getCounterNext()}, ${userLayoutModel.parentLayoutId}, '${userLayoutModel.name}', '', '', '', '', '${userLayoutModel.type}', '${typeSettings}', ${userLayoutModel.hidden?string}, '${userLayoutModel.friendlyURL}', ${userLayoutModel.iconImageId}, '${userLayoutModel.themeId}', '${userLayoutModel.colorSchemeId}', '${userLayoutModel.wapThemeId}', '${userLayoutModel.wapColorSchemeId}', '${userLayoutModel.css}', ${userLayoutModel.priority}, '${userLayoutModel.layoutPrototypeUuid}', ${userLayoutModel.layoutPrototypeLinkEnabled?string}, '${userLayoutModel.uuid}');
+		insert into LayoutFriendlyURL values (${userLayoutModel.mvccVersion}, '${dataFactory.getUUID()}', ${dataFactory.getCounterNext()},${groupId}, ${dataFactory.companyId}, ${_userId}, '', '${dataFactory.getDate()}', '${dataFactory.getDate()}', ${plid}, '${userLayoutModel.privateLayout?string}', '${userLayoutModel.friendlyURL}', 'en_US');
+	</#list>
+</#macro>
