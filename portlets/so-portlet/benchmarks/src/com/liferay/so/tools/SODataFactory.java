@@ -81,7 +81,7 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public String getColorSchemeId() {
-		return _colorSchemeId;
+		return _COLOR_SCHEME_ID;
 	}
 
 	public long getCompanyId() {
@@ -166,7 +166,7 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public String getThemeId() {
-		return _themeId;
+		return _THEME_ID;
 	}
 
 	public long getUserClassNameId() {
@@ -399,8 +399,8 @@ public class SODataFactory extends DataFactory {
 		LayoutSetModel layoutSetModel = newLayoutSetModel(
 			groupId, privateLayout, pageCount);
 
-		layoutSetModel.setThemeId(_themeId);
-		layoutSetModel.setColorSchemeId(_colorSchemeId);
+		layoutSetModel.setThemeId(_THEME_ID);
+		layoutSetModel.setColorSchemeId(_COLOR_SCHEME_ID);
 
 		_layoutSetModels.add(layoutSetModel);
 
@@ -669,7 +669,10 @@ public class SODataFactory extends DataFactory {
 		_userLayoutModels.add(MicroblogsModel);
 	}
 
-	private String _colorSchemeId = "01";
+	private static final String _COLOR_SCHEME_ID = "01";
+
+	private static final String _THEME_ID = "so_WAR_sotheme";
+
 	private long _companyId;
 	private long _defaultUserId;
 	private List<ExpandoColumnModel> _expandoColumnModels =
@@ -700,7 +703,6 @@ public class SODataFactory extends DataFactory {
 	private long _siteLayoutSetPrototypeGroupId;
 	private long _siteLayoutSetPrototypeId;
 	private RoleModel _soUserRoleModel;
-	private String _themeId = "so_WAR_sotheme";
 	private long _userClassNameId = getClassNameId(User.class.getName());
 	private Map<Long, Long> _userGroupIds = new HashMap<Long, Long>();
 	private List<LayoutModel> _userLayoutModels = new ArrayList<LayoutModel>();
