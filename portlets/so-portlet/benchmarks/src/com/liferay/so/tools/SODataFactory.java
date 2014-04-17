@@ -78,6 +78,11 @@ public class SODataFactory extends DataFactory {
 		initSOUserRoleModel();
 
 		initLayoutSetPrototype();
+		initReleases();
+	}
+
+	public int getBuildNumber(String key) {
+		return _releaseModels.get(key);
 	}
 
 	public String getColorSchemeId() {
@@ -153,6 +158,10 @@ public class SODataFactory extends DataFactory {
 		return _layoutSetPrototypeUserPublicModel;
 	}
 
+	public Set<String> getServletContextNames() {
+		return _releaseModels.keySet();
+	}
+
 	public List<LayoutModel> getSiteLayoutModels() {
 		return _siteLayoutModels;
 	}
@@ -215,6 +224,14 @@ public class SODataFactory extends DataFactory {
 		setupLayoutSetPrototypeSite();
 		setupLayoutSetPrototypeUserPrivate();
 		setupLayoutSetPrototypeUserPublic();
+	}
+
+	public void initReleases() {
+		_releaseModels.put("contacts-portlet", 200);
+		_releaseModels.put("marketplace-portlet", 100);
+		_releaseModels.put("private-messaging-portlet", 101);
+		_releaseModels.put("so-activities-hook", 101);
+		_releaseModels.put("so-hook", 300);
 	}
 
 	public void initSOUserRoleModel() {
@@ -715,6 +732,8 @@ public class SODataFactory extends DataFactory {
 	private LayoutSetPrototypeModel _layoutSetPrototypeSiteModel;
 	private LayoutSetPrototypeModel _layoutSetPrototypeUserPrivateModel;
 	private LayoutSetPrototypeModel _layoutSetPrototypeUserPublicModel;
+	private Map<String, Integer> _releaseModels =
+		new HashMap<String, Integer>();
 	private List<LayoutModel> _siteLayoutModels = new ArrayList<LayoutModel>();
 	private long _siteLayoutSetPrototypeGroupId;
 	private long _siteLayoutSetPrototypeId;
