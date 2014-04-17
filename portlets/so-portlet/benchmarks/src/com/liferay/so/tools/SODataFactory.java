@@ -30,7 +30,6 @@ import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.LayoutSetPrototypeModel;
 import com.liferay.portal.model.LayoutTypePortletConstants;
 import com.liferay.portal.model.RoleModel;
-import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserModel;
 import com.liferay.portal.model.impl.LayoutSetPrototypeModelImpl;
 import com.liferay.portal.tools.samplesqlbuilder.DataFactory;
@@ -122,7 +121,7 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public long getGroupId(long userId) {
-		return (Long)_userGroupIds.get(userId);
+		return _userGroupIds.get(userId);
 	}
 
 	public String getGroupTypeSettings() {
@@ -176,10 +175,6 @@ public class SODataFactory extends DataFactory {
 
 	public String getThemeId() {
 		return _THEME_ID;
-	}
-
-	public long getUserClassNameId() {
-		return _userClassNameId;
 	}
 
 	public Set<Long> getUserIds() {
@@ -284,8 +279,8 @@ public class SODataFactory extends DataFactory {
 		long groupId, LayoutModel sourcePrototypeLayout) {
 
 		LayoutModel layoutModel = (LayoutModel)sourcePrototypeLayout.clone();
-		layoutModel.setGroupId(groupId);
 		layoutModel.setPlid(getCounterNext());
+		layoutModel.setGroupId(groupId);
 		layoutModel.setLayoutId(getCounterNext());
 		layoutModel.setTypeSettings(
 			getSOTypeSettings() + StringPool.SPACE +
@@ -741,7 +736,6 @@ public class SODataFactory extends DataFactory {
 	private long _siteLayoutSetPrototypeGroupId;
 	private long _siteLayoutSetPrototypeId;
 	private RoleModel _soUserRoleModel;
-	private long _userClassNameId = getClassNameId(User.class.getName());
 	private Map<Long, Long> _userGroupIds = new HashMap<Long, Long>();
 	private long _userPrivateLayoutSetPrototypeGroupId;
 	private long _userPrivateLayoutSetPrototypeId;
