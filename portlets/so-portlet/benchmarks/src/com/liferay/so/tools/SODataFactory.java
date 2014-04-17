@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -50,11 +50,15 @@ import com.liferay.so.util.SocialOfficeConstants;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author Matthew Kong
+ * @author Sherry Yang
  */
 public class SODataFactory extends DataFactory {
 
@@ -91,6 +95,10 @@ public class SODataFactory extends DataFactory {
 		return _expandoValueModels;
 	}
 
+	public long getGroupId(long userId) {
+		return (Long)_userGroupIds.get(userId);
+	}
+
 	@Override
 	public List<GroupModel> getGroupModels() {
 		return _groupModels;
@@ -110,6 +118,10 @@ public class SODataFactory extends DataFactory {
 
 	public RoleModel getSOUserRoleModel() {
 		return _soUserRoleModel;
+	}
+
+	public Set<Long> getUserIds() {
+		return _userGroupIds.keySet();
 	}
 
 	public void initExpandos() {
@@ -147,6 +159,15 @@ public class SODataFactory extends DataFactory {
 	public void initSOUserRoleModel() {
 		_soUserRoleModel = newRoleModel(
 			RoleConstants.SOCIAL_OFFICE_USER, RoleConstants.TYPE_REGULAR);
+	}
+
+	@Override
+	public GroupModel newGroupModel(UserModel userModel) throws Exception {
+		GroupModel groupModel = super.newGroupModel(userModel);
+
+		_userGroupIds.put(userModel.getUserId(), groupModel.getGroupId());
+
+		return groupModel;
 	}
 
 	protected ExpandoColumnModel newExpandoColumnModel(
@@ -552,6 +573,7 @@ public class SODataFactory extends DataFactory {
 	private long _siteLayoutSetPrototypeGroupId;
 	private long _siteLayoutSetPrototypeId;
 	private RoleModel _soUserRoleModel;
+	private Map<Long, Long> _userGroupIds = new HashMap<Long, Long>();
 	private long _userPrivateLayoutSetPrototypeGroupId;
 	private long _userPrivateLayoutSetPrototypeId;
 	private long _userPublicLayoutSetPrototypeGroupId;
