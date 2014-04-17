@@ -284,8 +284,8 @@ public class SODataFactory extends DataFactory {
 		long groupId, LayoutModel sourcePrototypeLayout) {
 
 		LayoutModel layoutModel = (LayoutModel)sourcePrototypeLayout.clone();
-		layoutModel.setGroupId(groupId);
 		layoutModel.setPlid(getCounterNext());
+		layoutModel.setGroupId(groupId);
 		layoutModel.setLayoutId(getCounterNext());
 		layoutModel.setTypeSettings(
 			getSOTypeSettings() + StringPool.SPACE +
