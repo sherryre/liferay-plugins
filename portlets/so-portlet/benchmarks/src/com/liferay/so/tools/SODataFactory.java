@@ -95,6 +95,14 @@ public class SODataFactory extends DataFactory {
 		return _expandoValueModels;
 	}
 
+	public long getGroupExpandoColumnId() {
+		return _groupExpandoColumnId;
+	}
+
+	public long getGroupExpandoTableId() {
+		return _groupExpandoTableId;
+	}
+
 	public long getGroupId(long userId) {
 		return (Long)_userGroupIds.get(userId);
 	}
@@ -161,6 +169,38 @@ public class SODataFactory extends DataFactory {
 			RoleConstants.SOCIAL_OFFICE_USER, RoleConstants.TYPE_REGULAR);
 	}
 
+	public ExpandoRowModel newExpandoRowModel(
+		long rowId, long tableId, long classPK) {
+
+		ExpandoRowModel expandoRowModel = new ExpandoRowModelImpl();
+
+		expandoRowModel.setRowId(rowId);
+		expandoRowModel.setCompanyId(_companyId);
+		expandoRowModel.setModifiedDate(new Date());
+		expandoRowModel.setTableId(tableId);
+		expandoRowModel.setClassPK(classPK);
+
+		return expandoRowModel;
+	}
+
+	public ExpandoValueModel newExpandoValueModel(
+		long valueId, long tableId, long columnId, long rowId, long classNameId,
+		long classPK, String data) {
+
+		ExpandoValueModel expandoValueModel = new ExpandoValueImpl();
+
+		expandoValueModel.setValueId(valueId);
+		expandoValueModel.setCompanyId(_companyId);
+		expandoValueModel.setTableId(tableId);
+		expandoValueModel.setColumnId(columnId);
+		expandoValueModel.setRowId(rowId);
+		expandoValueModel.setClassNameId(classNameId);
+		expandoValueModel.setClassPK(classPK);
+		expandoValueModel.setData(data);
+
+		return expandoValueModel;
+	}
+
 	@Override
 	public GroupModel newGroupModel(UserModel userModel) throws Exception {
 		GroupModel groupModel = super.newGroupModel(userModel);
@@ -189,22 +229,6 @@ public class SODataFactory extends DataFactory {
 		return expandoColumnModel;
 	}
 
-	protected ExpandoRowModel newExpandoRowModel(
-		long rowId, long tableId, long classPK) {
-
-		ExpandoRowModel expandoRowModel = new ExpandoRowModelImpl();
-
-		expandoRowModel.setRowId(rowId);
-		expandoRowModel.setCompanyId(_companyId);
-		expandoRowModel.setModifiedDate(new Date());
-		expandoRowModel.setTableId(tableId);
-		expandoRowModel.setClassPK(classPK);
-
-		_expandoRowModels.add(expandoRowModel);
-
-		return expandoRowModel;
-	}
-
 	protected ExpandoTableModel newExpandoTableModel(
 		long tableId, long classNameId, String name) {
 
@@ -218,26 +242,6 @@ public class SODataFactory extends DataFactory {
 		_expandoTableModels.add(expandoTableModel);
 
 		return expandoTableModel;
-	}
-
-	protected ExpandoValueModel newExpandoValueModel(
-		long valueId, long tableId, long columnId, long rowId, long classNameId,
-		long classPK, String data) {
-
-		ExpandoValueModel expandoValueModel = new ExpandoValueImpl();
-
-		expandoValueModel.setValueId(valueId);
-		expandoValueModel.setCompanyId(_companyId);
-		expandoValueModel.setTableId(tableId);
-		expandoValueModel.setColumnId(columnId);
-		expandoValueModel.setRowId(rowId);
-		expandoValueModel.setClassNameId(classNameId);
-		expandoValueModel.setClassPK(classPK);
-		expandoValueModel.setData(data);
-
-		_expandoValueModels.add(expandoValueModel);
-
-		return expandoValueModel;
 	}
 
 	protected LayoutModel newLayoutModel(
@@ -343,15 +347,19 @@ public class SODataFactory extends DataFactory {
 
 		long expandoRowId = getCounterNext();
 
-		newExpandoValueModel(
+		ExpandoValueModel expandoValueModel = newExpandoValueModel(
 			getCounterNext(), _layoutSetPrototypeExpandoTableId,
 			_layoutSetPrototypeExpandoColumnId, expandoRowId,
 			_layoutSetPrototypeClassNameId, _siteLayoutSetPrototypeId,
 			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_SITE);
 
-		newExpandoRowModel(
+		_expandoValueModels.add(expandoValueModel);
+
+		ExpandoRowModel expandoRowModel = newExpandoRowModel(
 			expandoRowId, _layoutSetPrototypeExpandoTableId,
 			_siteLayoutSetPrototypeId);
+
+		_expandoRowModels.add(expandoRowModel);
 
 		_siteLayoutSetPrototypeGroupId = getCounterNext();
 
@@ -435,15 +443,19 @@ public class SODataFactory extends DataFactory {
 
 		long expandoRowId = getCounterNext();
 
-		newExpandoValueModel(
+		ExpandoValueModel expandoValueModel = newExpandoValueModel(
 			getCounterNext(), _layoutSetPrototypeExpandoTableId,
 			_layoutSetPrototypeExpandoColumnId, expandoRowId,
 			_layoutSetPrototypeClassNameId, _userPrivateLayoutSetPrototypeId,
 			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_USER_PRIVATE);
 
-		newExpandoRowModel(
+		_expandoValueModels.add(expandoValueModel);
+
+		ExpandoRowModel expandoRowModel = newExpandoRowModel(
 			expandoRowId, _layoutSetPrototypeExpandoTableId,
 			_userPrivateLayoutSetPrototypeId);
+
+		_expandoRowModels.add(expandoRowModel);
 
 		_userPrivateLayoutSetPrototypeGroupId = getCounterNext();
 
@@ -505,16 +517,19 @@ public class SODataFactory extends DataFactory {
 
 		long expandoRowId = getCounterNext();
 
-		newExpandoValueModel(
+		ExpandoValueModel expandoValueModel = newExpandoValueModel(
 			getCounterNext(), _layoutSetPrototypeExpandoTableId,
 			_layoutSetPrototypeExpandoColumnId, expandoRowId,
 			_layoutSetPrototypeClassNameId, _userPublicLayoutSetPrototypeId,
 			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_USER_PRIVATE);
 
-		newExpandoRowModel(
+		_expandoValueModels.add(expandoValueModel);
+
+		ExpandoRowModel expandoRowModel = newExpandoRowModel(
 			expandoRowId, _layoutSetPrototypeExpandoTableId,
 			_userPublicLayoutSetPrototypeId);
 
+		_expandoRowModels.add(expandoRowModel);
 		_userPublicLayoutSetPrototypeGroupId = getCounterNext();
 
 		_groupModels.add(
