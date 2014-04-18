@@ -65,14 +65,6 @@ public class SODataFactory extends DataFactory {
 	public SODataFactory(Properties properties) throws Exception {
 		super(properties);
 
-		CompanyModel companyModel = getCompanyModel();
-
-		_companyId = companyModel.getCompanyId();
-
-		UserModel defaultUserModel = getDefaultUserModel();
-
-		_defaultUserId = defaultUserModel.getUserId();
-
 		initExpandos();
 
 		initLayoutSetPrototype();
@@ -89,11 +81,19 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public long getCompanyId() {
-		return _companyId;
+		CompanyModel companyModel = getCompanyModel();
+
+		return companyModel.getCompanyId();
 	}
 
 	public String getDate() {
 		return getDateString(new Date());
+	}
+
+	public long getDefaultUserId() {
+		UserModel defaultUserModel = getDefaultUserModel();
+
+		return defaultUserModel.getUserId();
 	}
 
 	public List<ExpandoColumnModel> getExpandoColumnModels() {
@@ -240,7 +240,7 @@ public class SODataFactory extends DataFactory {
 		ExpandoRowModel expandoRowModel = new ExpandoRowModelImpl();
 
 		expandoRowModel.setRowId(rowId);
-		expandoRowModel.setCompanyId(_companyId);
+		expandoRowModel.setCompanyId(getCompanyId());
 		expandoRowModel.setModifiedDate(new Date());
 		expandoRowModel.setTableId(tableId);
 		expandoRowModel.setClassPK(classPK);
@@ -255,7 +255,7 @@ public class SODataFactory extends DataFactory {
 		ExpandoValueModel expandoValueModel = new ExpandoValueImpl();
 
 		expandoValueModel.setValueId(valueId);
-		expandoValueModel.setCompanyId(_companyId);
+		expandoValueModel.setCompanyId(getCompanyId());
 		expandoValueModel.setTableId(tableId);
 		expandoValueModel.setColumnId(columnId);
 		expandoValueModel.setRowId(rowId);
@@ -298,7 +298,7 @@ public class SODataFactory extends DataFactory {
 		ExpandoColumnModel expandoColumnModel = new ExpandoColumnImpl();
 
 		expandoColumnModel.setColumnId(columnId);
-		expandoColumnModel.setCompanyId(_companyId);
+		expandoColumnModel.setCompanyId(getCompanyId());
 		expandoColumnModel.setTableId(tableId);
 		expandoColumnModel.setName(name);
 		expandoColumnModel.setType(type);
@@ -316,7 +316,7 @@ public class SODataFactory extends DataFactory {
 		ExpandoTableModel expandoTableModel = new ExpandoTableImpl();
 
 		expandoTableModel.setTableId(tableId);
-		expandoTableModel.setCompanyId(_companyId);
+		expandoTableModel.setCompanyId(getCompanyId());
 		expandoTableModel.setClassNameId(classNameId);
 		expandoTableModel.setName(name);
 
@@ -380,7 +380,7 @@ public class SODataFactory extends DataFactory {
 
 		layoutSetPrototypeModel.setUuid(SequentialUUID.generate());
 		layoutSetPrototypeModel.setLayoutSetPrototypeId(layoutSetPrototypeId);
-		layoutSetPrototypeModel.setCompanyId(_companyId);
+		layoutSetPrototypeModel.setCompanyId(getCompanyId());
 		layoutSetPrototypeModel.setUserId(userId);
 		layoutSetPrototypeModel.setCreateDate(new Date());
 		layoutSetPrototypeModel.setModifiedDate(new Date());
@@ -442,7 +442,7 @@ public class SODataFactory extends DataFactory {
 		_siteLayoutSetPrototypeId = getCounterNext();
 
 		_layoutSetPrototypeSiteModel = newLayoutSetPrototypeModel(
-			_siteLayoutSetPrototypeId, _defaultUserId,
+			_siteLayoutSetPrototypeId, getDefaultUserId(),
 			"Default Social Office Site", StringPool.BLANK, true);
 
 		long expandoRowId = getCounterNext();
@@ -554,7 +554,7 @@ public class SODataFactory extends DataFactory {
 		_userPrivateLayoutSetPrototypeId = getCounterNext();
 
 		_layoutSetPrototypeUserPrivateModel = newLayoutSetPrototypeModel(
-			_userPrivateLayoutSetPrototypeId, _defaultUserId,
+			_userPrivateLayoutSetPrototypeId, getDefaultUserId(),
 			"Social Office User Private Home", StringPool.BLANK, true);
 
 		long expandoRowId = getCounterNext();
@@ -641,7 +641,7 @@ public class SODataFactory extends DataFactory {
 		_userPublicLayoutSetPrototypeId = getCounterNext();
 
 		_layoutSetPrototypeUserPublicModel = newLayoutSetPrototypeModel(
-			_userPublicLayoutSetPrototypeId, _defaultUserId,
+			_userPublicLayoutSetPrototypeId, getDefaultUserId(),
 			"Social Office User Public Home", StringPool.BLANK, true);
 
 		long expandoRowId = getCounterNext();
@@ -708,8 +708,6 @@ public class SODataFactory extends DataFactory {
 	private static final String _THEME_ID = "so_WAR_sotheme";
 
 	private Map<String, Integer> _buildNumbers = new HashMap<String, Integer>();
-	private long _companyId;
-	private long _defaultUserId;
 	private List<ExpandoColumnModel> _expandoColumnModels =
 		new ArrayList<ExpandoColumnModel>();
 	private List<ExpandoRowModel> _expandoRowModels =
