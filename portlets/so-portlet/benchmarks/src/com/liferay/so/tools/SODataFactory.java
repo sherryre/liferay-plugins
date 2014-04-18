@@ -168,10 +168,6 @@ public class SODataFactory extends DataFactory {
 		return _userSourcePrototypeLayoutModels;
 	}
 
-	public String getUUID() {
-		return SequentialUUID.generate();
-	}
-
 	public void initExpandos() {
 		_groupExpandoColumnId = getCounterNext();
 		_groupExpandoTableId = getCounterNext();
