@@ -136,16 +136,16 @@ public class SODataFactory extends DataFactory {
 		return _layoutSetPrototypeModels;
 	}
 
-	public LayoutSetPrototypeModel getLayoutSetPrototypeSiteModel() {
-		return _layoutSetPrototypeSiteModel;
+	public LayoutSetPrototypeModel getSiteLayoutSetPrototypeModel() {
+		return _siteLayoutSetPrototypeModel;
 	}
 
-	public LayoutSetPrototypeModel getLayoutSetPrototypeUserPrivateModel() {
-		return _layoutSetPrototypeUserPrivateModel;
+	public LayoutSetPrototypeModel getUserPrivateLayoutSetPrototypeModel() {
+		return _userPrivateLayoutSetPrototypeModel;
 	}
 
-	public LayoutSetPrototypeModel getLayoutSetPrototypeUserPublicModel() {
-		return _layoutSetPrototypeUserPublicModel;
+	public LayoutSetPrototypeModel getUserPublicLayoutSetPrototypeModel() {
+		return _userPublicLayoutSetPrototypeModel;
 	}
 
 	public List<ReleaseModel> getReleaseModels() {
@@ -288,7 +288,7 @@ public class SODataFactory extends DataFactory {
 		userPrivateLayoutSetModel.setSettings(
 			"last-merge-time=" + System.currentTimeMillis());
 		userPrivateLayoutSetModel.setLayoutSetPrototypeUuid(
-			_layoutSetPrototypeUserPrivateModel.getUuid());
+			_userPrivateLayoutSetPrototypeModel.getUuid());
 		userPrivateLayoutSetModel.setLayoutSetPrototypeLinkEnabled(true);
 
 		userLayoutSetModels.add(userPrivateLayoutSetModel);
@@ -300,7 +300,7 @@ public class SODataFactory extends DataFactory {
 		userPublicLayoutSetModel.setSettings(
 			"last-merge-time=" + System.currentTimeMillis());
 		userPublicLayoutSetModel.setLayoutSetPrototypeUuid(
-			_layoutSetPrototypeUserPublicModel.getUuid());
+			_userPublicLayoutSetPrototypeModel.getUuid());
 		userPublicLayoutSetModel.setLayoutSetPrototypeLinkEnabled(true);
 
 		userLayoutSetModels.add(userPublicLayoutSetModel);
@@ -475,7 +475,7 @@ public class SODataFactory extends DataFactory {
 	protected void setupLayoutSetPrototypeSite() throws Exception {
 		long siteLayoutSetPrototypeId = getCounterNext();
 
-		_layoutSetPrototypeSiteModel = newLayoutSetPrototypeModel(
+		_siteLayoutSetPrototypeModel = newLayoutSetPrototypeModel(
 			siteLayoutSetPrototypeId, getDefaultUserId(),
 			"Default Social Office Site", StringPool.BLANK, true);
 
@@ -590,7 +590,7 @@ public class SODataFactory extends DataFactory {
 	protected void setupLayoutSetPrototypeUserPrivate() throws Exception {
 		long userPrivateLayoutSetPrototypeId = getCounterNext();
 
-		_layoutSetPrototypeUserPrivateModel = newLayoutSetPrototypeModel(
+		_userPrivateLayoutSetPrototypeModel = newLayoutSetPrototypeModel(
 			userPrivateLayoutSetPrototypeId, getDefaultUserId(),
 			"Social Office User Private Home", StringPool.BLANK, true);
 
@@ -686,7 +686,7 @@ public class SODataFactory extends DataFactory {
 	protected void setupLayoutSetPrototypeUserPublic() throws Exception {
 		long userPublicLayoutSetPrototypeId = getCounterNext();
 
-		_layoutSetPrototypeUserPublicModel = newLayoutSetPrototypeModel(
+		_userPublicLayoutSetPrototypeModel = newLayoutSetPrototypeModel(
 			userPublicLayoutSetPrototypeId, getDefaultUserId(),
 			"Social Office User Public Home", StringPool.BLANK, true);
 
@@ -778,9 +778,9 @@ public class SODataFactory extends DataFactory {
 		new ArrayList<GroupModel>();
 	private List<LayoutSetPrototypeModel> _layoutSetPrototypeModels =
 		new ArrayList<LayoutSetPrototypeModel>();
-	private LayoutSetPrototypeModel _layoutSetPrototypeSiteModel;
-	private LayoutSetPrototypeModel _layoutSetPrototypeUserPrivateModel;
-	private LayoutSetPrototypeModel _layoutSetPrototypeUserPublicModel;
+	private LayoutSetPrototypeModel _siteLayoutSetPrototypeModel;
+	private LayoutSetPrototypeModel _userPrivateLayoutSetPrototypeModel;
+	private LayoutSetPrototypeModel _userPublicLayoutSetPrototypeModel;
 	private List<ReleaseModel> _releaseModels = new ArrayList<ReleaseModel>();
 	private List<LayoutModel> _siteLayoutModels = new ArrayList<LayoutModel>();
 	private RoleModel _soUserRoleModel;
