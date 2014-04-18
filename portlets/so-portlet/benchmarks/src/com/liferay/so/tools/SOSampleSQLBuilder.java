@@ -84,7 +84,8 @@ public class SOSampleSQLBuilder {
 		File output = new File(portalOutputDir, "plugin");
 
 		FileUtil.deltree(output);
-		output.mkdir();
+
+		output.mkdirs();
 
 		properties.put("sample.sql.output.dir", output.getPath());
 		properties.put("sample.sql.output.csv.file.names", "so");
