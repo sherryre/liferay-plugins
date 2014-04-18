@@ -7,15 +7,15 @@
 		_userId = userId
 	/>
 
+	<@insertUserLayouts
+		_userId = userId
+	/>
+
 	<@updateGroup
 		_userId = userId
 	/>
 
 	<@updateUserLayoutSet
-		_userId = userId
-	/>
-
-	<@updateUserLayouts
 		_userId = userId
 	/>
 </#list>

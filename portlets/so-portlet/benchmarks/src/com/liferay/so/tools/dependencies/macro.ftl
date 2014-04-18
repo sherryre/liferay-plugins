@@ -33,13 +33,7 @@
 	insert into Users_Roles values (${soUserRoleModel.roleId}, ${_userId});
 </#macro>
 
-<#macro updateGroup
-	_userId
->
-	update Group_ set typeSettings='${dataFactory.groupTypeSettings}' where groupId=${dataFactory.getGroupId(_userId)};
-</#macro>
-
-<#macro updateUserLayouts
+<#macro insertUserLayouts
 	_userId
 >
 	<#local groupId = dataFactory.getGroupId(_userId)>
@@ -54,6 +48,12 @@
 			_entry = userLayoutModel
 		/>
 	</#list>
+</#macro>
+
+<#macro updateGroup
+	_userId
+>
+	update Group_ set typeSettings='${dataFactory.groupTypeSettings}' where groupId=${dataFactory.getGroupId(_userId)};
 </#macro>
 
 <#macro updateUserLayoutSet
