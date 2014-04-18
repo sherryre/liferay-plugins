@@ -62,11 +62,7 @@
 <#macro updateUserLayoutSet
 	_userId
 >
-	<#local layoutSetPrototypeUserPrivateModel = dataFactory.layoutSetPrototypeUserPrivateModel>
-
-	update LayoutSet set themeId='${dataFactory.themeId}', colorSchemeId='${dataFactory.colorSchemeId}', pageCount=7, settings_='${dataFactory.getSOTypeSettings()}', layoutSetPrototypeUuid='${layoutSetPrototypeUserPrivateModel.uuid}', layoutSetPrototypeLinkEnabled=1 where groupId=${dataFactory.getGroupId(_userId)} and privateLayout=1;
-
-	<#local layoutSetPrototypeUserPublicModel = dataFactory.layoutSetPrototypeUserPublicModel>
-
-	update LayoutSet set themeId='${dataFactory.themeId}', colorSchemeId='${dataFactory.colorSchemeId}', pageCount=4, settings_='${dataFactory.getSOTypeSettings()}', layoutSetPrototypeUuid='${layoutSetPrototypeUserPrivateModel.uuid}', layoutSetPrototypeLinkEnabled=1 where groupId=${dataFactory.getGroupId(_userId)} and privateLayout=0;
+	<#list dataFactory.newUserLayoutSetModels(_userId) as layoutSetModel>
+		update LayoutSet set themeId='${layoutSetModel.themeId}', colorSchemeId='${layoutSetModel.colorSchemeId}', pageCount=${layoutSetModel.pageCount}, settings_='${layoutSetModel.settings}', layoutSetPrototypeUuid='${layoutSetModel.layoutSetPrototypeUuid}', layoutSetPrototypeLinkEnabled=${layoutSetModel.layoutSetPrototypeLinkEnabled?string} where groupId=${layoutSetModel.groupId} and privateLayout=${layoutSetModel.privateLayout?string};
+	</#list>
 </#macro>

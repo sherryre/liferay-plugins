@@ -74,10 +74,6 @@ public class SODataFactory extends DataFactory {
 		initSOUserRoleModel();
 	}
 
-	public String getColorSchemeId() {
-		return _COLOR_SCHEME_ID;
-	}
-
 	public long getCompanyId() {
 		CompanyModel companyModel = getCompanyModel();
 
@@ -160,16 +156,8 @@ public class SODataFactory extends DataFactory {
 		return _siteLayoutModels;
 	}
 
-	public String getSOTypeSettings() {
-		return "last-merge-time="+ System.currentTimeMillis();
-	}
-
 	public RoleModel getSOUserRoleModel() {
 		return _soUserRoleModel;
-	}
-
-	public String getThemeId() {
-		return _THEME_ID;
 	}
 
 	public Set<Long> getUserIds() {
@@ -277,13 +265,51 @@ public class SODataFactory extends DataFactory {
 		layoutModel.setPlid(getCounterNext());
 		layoutModel.setGroupId(groupId);
 		layoutModel.setLayoutId(getCounterNext());
-		layoutModel.setTypeSettings(
-			getSOTypeSettings() + StringPool.SPACE +
-			sourcePrototypeLayout.getTypeSettings());
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("last-merge-time=");
+		sb.append(System.currentTimeMillis());
+		sb.append(StringPool.SPACE);
+		sb.append(sourcePrototypeLayout.getTypeSettings());
+
+		layoutModel.setTypeSettings(sb.toString());
+
 		layoutModel.setSourcePrototypeLayoutUuid(
 			sourcePrototypeLayout.getUuid());
 
 		return layoutModel;
+	}
+
+	public List<LayoutSetModel> newUserLayoutSetModels(long userId) {
+		List<LayoutSetModel> userLayoutSetModels =
+			new ArrayList<LayoutSetModel>();
+
+		LayoutSetModel userPrivateLayoutSetModel = newSOLayoutSetModel(
+			getGroupId(userId), true,
+			_userPrivateLayoutSetPrototypeLayoutSize + 1);
+
+		userPrivateLayoutSetModel.setSettings(
+			"last-merge-time=" + System.currentTimeMillis());
+		userPrivateLayoutSetModel.setLayoutSetPrototypeUuid(
+			_layoutSetPrototypeUserPrivateModel.getUuid());
+		userPrivateLayoutSetModel.setLayoutSetPrototypeLinkEnabled(true);
+
+		userLayoutSetModels.add(userPrivateLayoutSetModel);
+
+		LayoutSetModel userPublicLayoutSetModel = newSOLayoutSetModel(
+			getGroupId(userId), false,
+			_userPublicLayoutSetPrototypeLayoutSize + 1);
+
+		userPublicLayoutSetModel.setSettings(
+			"last-merge-time=" + System.currentTimeMillis());
+		userPublicLayoutSetModel.setLayoutSetPrototypeUuid(
+			_layoutSetPrototypeUserPublicModel.getUuid());
+		userPublicLayoutSetModel.setLayoutSetPrototypeLinkEnabled(true);
+
+		userLayoutSetModels.add(userPublicLayoutSetModel);
+
+		return userLayoutSetModels;
 	}
 
 	protected ExpandoColumnModel newExpandoColumnModel(
@@ -444,10 +470,8 @@ public class SODataFactory extends DataFactory {
 		LayoutSetModel layoutSetModel = newLayoutSetModel(
 			groupId, privateLayout, pageCount);
 
-		layoutSetModel.setThemeId(_THEME_ID);
-		layoutSetModel.setColorSchemeId(_COLOR_SCHEME_ID);
-
-		_layoutSetModels.add(layoutSetModel);
+		layoutSetModel.setThemeId("01");
+		layoutSetModel.setColorSchemeId("so_WAR_sotheme");
 
 		return layoutSetModel;
 	}
@@ -482,9 +506,6 @@ public class SODataFactory extends DataFactory {
 				siteLayoutSetPrototypeGroupId, _layoutSetPrototypeClassNameId,
 				siteLayoutSetPrototypeId,
 				String.valueOf(siteLayoutSetPrototypeId), false));
-
-		newSOLayoutSetModel(siteLayoutSetPrototypeGroupId, true, 7);
-		newSOLayoutSetModel(siteLayoutSetPrototypeGroupId, false, 0);
 
 		// Home
 
@@ -562,6 +583,12 @@ public class SODataFactory extends DataFactory {
 			PortletKeys.SO_INVITE_MEMBERS + ",4_WAR_contactsportlet", null);
 
 		_siteLayoutModels.add(memberLayoutModel);
+
+		_layoutSetModels.add(
+			newSOLayoutSetModel(siteLayoutSetPrototypeGroupId, true,
+			_siteLayoutModels.size()));
+		_layoutSetModels.add(
+			newSOLayoutSetModel(siteLayoutSetPrototypeGroupId, false, 0));
 	}
 
 	protected void setupLayoutSetPrototypeUserPrivate() throws Exception {
@@ -592,12 +619,10 @@ public class SODataFactory extends DataFactory {
 		_layoutSetPrototypeGroupModels.add(
 			newLayoutSetPrototypeGroupModel(
 				userPrivateLayoutSetPrototypeGroupId,
-				_layoutSetPrototypeClassNameId,
-				userPrivateLayoutSetPrototypeId,
+				_layoutSetPrototypeClassNameId, userPrivateLayoutSetPrototypeId,
 				String.valueOf(userPrivateLayoutSetPrototypeId), false));
 
-		newSOLayoutSetModel(userPrivateLayoutSetPrototypeGroupId, true, 6);
-		newSOLayoutSetModel(userPrivateLayoutSetPrototypeGroupId, false, 0);
+		int originalSize = _userSourcePrototypeLayoutModels.size();
 
 		// Dashboard
 
@@ -637,8 +662,8 @@ public class SODataFactory extends DataFactory {
 		// Documents
 
 		LayoutModel documentsLayoutModel = newLayoutModel(
-			userPrivateLayoutSetPrototypeGroupId, "Documents", true,
-			"1_column", PortletKeys.DOCUMENT_LIBRARY, null);
+			userPrivateLayoutSetPrototypeGroupId, "Documents", true, "1_column",
+			PortletKeys.DOCUMENT_LIBRARY, null);
 
 		_userSourcePrototypeLayoutModels.add(documentsLayoutModel);
 
@@ -649,6 +674,17 @@ public class SODataFactory extends DataFactory {
 			"1_WAR_tasksportlet", null);
 
 		_userSourcePrototypeLayoutModels.add(tasksLayoutModel);
+
+		_userPrivateLayoutSetPrototypeLayoutSize =
+			_userSourcePrototypeLayoutModels.size() - originalSize;
+
+		_layoutSetModels.add(
+			newSOLayoutSetModel(
+				userPrivateLayoutSetPrototypeGroupId, true,
+				_userPrivateLayoutSetPrototypeLayoutSize));
+		_layoutSetModels.add(
+			newSOLayoutSetModel(
+				userPrivateLayoutSetPrototypeGroupId, false, 0));
 	}
 
 	protected void setupLayoutSetPrototypeUserPublic() throws Exception {
@@ -682,8 +718,7 @@ public class SODataFactory extends DataFactory {
 				_layoutSetPrototypeClassNameId, userPublicLayoutSetPrototypeId,
 				String.valueOf(userPublicLayoutSetPrototypeId), false));
 
-		newSOLayoutSetModel(userPublicLayoutSetPrototypeGroupId, true, 0);
-		newSOLayoutSetModel(userPublicLayoutSetPrototypeGroupId, false, 3);
+		int originalSize = _userSourcePrototypeLayoutModels.size();
 
 		// Profile
 
@@ -712,14 +747,20 @@ public class SODataFactory extends DataFactory {
 			null);
 
 		_userSourcePrototypeLayoutModels.add(MicroblogsModel);
-	}
 
-	private static final String _COLOR_SCHEME_ID = "01";
+		_userPublicLayoutSetPrototypeLayoutSize =
+			_userSourcePrototypeLayoutModels.size() - originalSize;
+
+		_layoutSetModels.add(
+			newSOLayoutSetModel(userPublicLayoutSetPrototypeGroupId, true, 0));
+		_layoutSetModels.add(
+			newSOLayoutSetModel(
+				userPublicLayoutSetPrototypeGroupId, false,
+				_userPublicLayoutSetPrototypeLayoutSize));
+	}
 
 	private static final String _GROUP_TYPE_SETTINGS =
 		"customJspServletContextName=so-hook";
-
-	private static final String _THEME_ID = "so_WAR_sotheme";
 
 	private List<ExpandoColumnModel> _expandoColumnModels =
 		new ArrayList<ExpandoColumnModel>();
@@ -748,6 +789,8 @@ public class SODataFactory extends DataFactory {
 	private List<LayoutModel> _siteLayoutModels = new ArrayList<LayoutModel>();
 	private RoleModel _soUserRoleModel;
 	private Map<Long, Long> _userGroupIds = new HashMap<Long, Long>();
+	private int _userPrivateLayoutSetPrototypeLayoutSize;
+	private int _userPublicLayoutSetPrototypeLayoutSize;
 	private List<LayoutModel> _userSourcePrototypeLayoutModels =
 		new ArrayList<LayoutModel>();
 
