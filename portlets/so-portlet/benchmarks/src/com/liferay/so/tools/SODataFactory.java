@@ -29,9 +29,11 @@ import com.liferay.portal.model.LayoutSetModel;
 import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.LayoutSetPrototypeModel;
 import com.liferay.portal.model.LayoutTypePortletConstants;
+import com.liferay.portal.model.ReleaseModel;
 import com.liferay.portal.model.RoleModel;
 import com.liferay.portal.model.UserModel;
 import com.liferay.portal.model.impl.LayoutSetPrototypeModelImpl;
+import com.liferay.portal.model.impl.ReleaseModelImpl;
 import com.liferay.portal.tools.samplesqlbuilder.DataFactory;
 import com.liferay.portal.tools.samplesqlbuilder.SequentialUUID;
 import com.liferay.portlet.expando.model.ExpandoColumnConstants;
@@ -72,10 +74,6 @@ public class SODataFactory extends DataFactory {
 		initSOUserRoleModel();
 	}
 
-	public int getBuildNumber(String key) {
-		return _buildNumbers.get(key);
-	}
-
 	public String getColorSchemeId() {
 		return _COLOR_SCHEME_ID;
 	}
@@ -84,10 +82,6 @@ public class SODataFactory extends DataFactory {
 		CompanyModel companyModel = getCompanyModel();
 
 		return companyModel.getCompanyId();
-	}
-
-	public String getDate() {
-		return getDateString(new Date());
 	}
 
 	public long getDefaultUserId() {
@@ -157,8 +151,8 @@ public class SODataFactory extends DataFactory {
 		return _layoutSetPrototypeUserPublicModel;
 	}
 
-	public Set<String> getServletContextNames() {
-		return _buildNumbers.keySet();
+	public List<ReleaseModel> getReleaseModels() {
+		return _releaseModels;
 	}
 
 	public List<LayoutModel> getSiteLayoutModels() {
@@ -222,11 +216,11 @@ public class SODataFactory extends DataFactory {
 	}
 
 	public void initReleases() {
-		_buildNumbers.put("contacts-portlet", 200);
-		_buildNumbers.put("marketplace-portlet", 100);
-		_buildNumbers.put("private-messaging-portlet", 101);
-		_buildNumbers.put("so-activities-hook", 101);
-		_buildNumbers.put("so-hook", 300);
+		newReleaseModel("contacts-portlet", 200);
+		newReleaseModel("marketplace-portlet", 100);
+		newReleaseModel("private-messaging-portlet", 101);
+		newReleaseModel("so-activities-hook", 101);
+		newReleaseModel("so-hook", 300);
 	}
 
 	public void initSOUserRoleModel() {
@@ -422,6 +416,25 @@ public class SODataFactory extends DataFactory {
 		_layoutSetPrototypeModels.add(layoutSetPrototypeModel);
 
 		return layoutSetPrototypeModel;
+	}
+
+	protected ReleaseModel newReleaseModel(
+		String servletContextName, int buildNumber) {
+
+		ReleaseModel releaseModel = new ReleaseModelImpl();
+
+		releaseModel.setReleaseId(getCounterNext());
+		releaseModel.setCreateDate(new Date());
+		releaseModel.setModifiedDate(new Date());
+		releaseModel.setServletContextName(servletContextName);
+		releaseModel.setBuildNumber(buildNumber);
+		releaseModel.setBuildDate(new Date());
+		releaseModel.setVerified(true);
+		releaseModel.setState(0);
+
+		_releaseModels.add(releaseModel);
+
+		return releaseModel;
 	}
 
 	protected LayoutSetModel newSOLayoutSetModel(
@@ -707,7 +720,6 @@ public class SODataFactory extends DataFactory {
 
 	private static final String _THEME_ID = "so_WAR_sotheme";
 
-	private Map<String, Integer> _buildNumbers = new HashMap<String, Integer>();
 	private List<ExpandoColumnModel> _expandoColumnModels =
 		new ArrayList<ExpandoColumnModel>();
 	private List<ExpandoRowModel> _expandoRowModels =
@@ -731,6 +743,7 @@ public class SODataFactory extends DataFactory {
 	private LayoutSetPrototypeModel _layoutSetPrototypeSiteModel;
 	private LayoutSetPrototypeModel _layoutSetPrototypeUserPrivateModel;
 	private LayoutSetPrototypeModel _layoutSetPrototypeUserPublicModel;
+	private List<ReleaseModel> _releaseModels = new ArrayList<ReleaseModel>();
 	private List<LayoutModel> _siteLayoutModels = new ArrayList<LayoutModel>();
 	private long _siteLayoutSetPrototypeGroupId;
 	private long _siteLayoutSetPrototypeId;
