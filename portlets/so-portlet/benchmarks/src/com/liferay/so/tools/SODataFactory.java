@@ -144,24 +144,12 @@ public class SODataFactory extends DataFactory {
 		return _siteLayoutModels;
 	}
 
-	public LayoutSetPrototypeModel getSiteLayoutSetPrototypeModel() {
-		return _siteLayoutSetPrototypeModel;
-	}
-
 	public RoleModel getSOUserRoleModel() {
 		return _soUserRoleModel;
 	}
 
 	public Set<Long> getUserIds() {
 		return _userGroupIds.keySet();
-	}
-
-	public LayoutSetPrototypeModel getUserPrivateLayoutSetPrototypeModel() {
-		return _userPrivateLayoutSetPrototypeModel;
-	}
-
-	public LayoutSetPrototypeModel getUserPublicLayoutSetPrototypeModel() {
-		return _userPublicLayoutSetPrototypeModel;
 	}
 
 	public List<LayoutModel> getUserSourcePrototypeLayoutModels() {
@@ -475,7 +463,7 @@ public class SODataFactory extends DataFactory {
 	protected void setupLayoutSetPrototypeSite() throws Exception {
 		long siteLayoutSetPrototypeId = getCounterNext();
 
-		_siteLayoutSetPrototypeModel = newLayoutSetPrototypeModel(
+		newLayoutSetPrototypeModel(
 			siteLayoutSetPrototypeId, getDefaultUserId(),
 			"Default Social Office Site", StringPool.BLANK, true);
 
@@ -780,7 +768,6 @@ public class SODataFactory extends DataFactory {
 		new ArrayList<LayoutSetPrototypeModel>();
 	private List<ReleaseModel> _releaseModels = new ArrayList<ReleaseModel>();
 	private List<LayoutModel> _siteLayoutModels = new ArrayList<LayoutModel>();
-	private LayoutSetPrototypeModel _siteLayoutSetPrototypeModel;
 	private RoleModel _soUserRoleModel;
 	private Map<Long, Long> _userGroupIds = new HashMap<Long, Long>();
 	private int _userPrivateLayoutSetPrototypeLayoutSize;
