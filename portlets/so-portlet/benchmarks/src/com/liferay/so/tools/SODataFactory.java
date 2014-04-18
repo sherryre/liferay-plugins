@@ -136,18 +136,6 @@ public class SODataFactory extends DataFactory {
 		return _layoutSetPrototypeModels;
 	}
 
-	public LayoutSetPrototypeModel getSiteLayoutSetPrototypeModel() {
-		return _siteLayoutSetPrototypeModel;
-	}
-
-	public LayoutSetPrototypeModel getUserPrivateLayoutSetPrototypeModel() {
-		return _userPrivateLayoutSetPrototypeModel;
-	}
-
-	public LayoutSetPrototypeModel getUserPublicLayoutSetPrototypeModel() {
-		return _userPublicLayoutSetPrototypeModel;
-	}
-
 	public List<ReleaseModel> getReleaseModels() {
 		return _releaseModels;
 	}
@@ -156,12 +144,24 @@ public class SODataFactory extends DataFactory {
 		return _siteLayoutModels;
 	}
 
+	public LayoutSetPrototypeModel getSiteLayoutSetPrototypeModel() {
+		return _siteLayoutSetPrototypeModel;
+	}
+
 	public RoleModel getSOUserRoleModel() {
 		return _soUserRoleModel;
 	}
 
 	public Set<Long> getUserIds() {
 		return _userGroupIds.keySet();
+	}
+
+	public LayoutSetPrototypeModel getUserPrivateLayoutSetPrototypeModel() {
+		return _userPrivateLayoutSetPrototypeModel;
+	}
+
+	public LayoutSetPrototypeModel getUserPublicLayoutSetPrototypeModel() {
+		return _userPublicLayoutSetPrototypeModel;
 	}
 
 	public List<LayoutModel> getUserSourcePrototypeLayoutModels() {
@@ -778,15 +778,15 @@ public class SODataFactory extends DataFactory {
 		new ArrayList<GroupModel>();
 	private List<LayoutSetPrototypeModel> _layoutSetPrototypeModels =
 		new ArrayList<LayoutSetPrototypeModel>();
-	private LayoutSetPrototypeModel _siteLayoutSetPrototypeModel;
-	private LayoutSetPrototypeModel _userPrivateLayoutSetPrototypeModel;
-	private LayoutSetPrototypeModel _userPublicLayoutSetPrototypeModel;
 	private List<ReleaseModel> _releaseModels = new ArrayList<ReleaseModel>();
 	private List<LayoutModel> _siteLayoutModels = new ArrayList<LayoutModel>();
+	private LayoutSetPrototypeModel _siteLayoutSetPrototypeModel;
 	private RoleModel _soUserRoleModel;
 	private Map<Long, Long> _userGroupIds = new HashMap<Long, Long>();
 	private int _userPrivateLayoutSetPrototypeLayoutSize;
+	private LayoutSetPrototypeModel _userPrivateLayoutSetPrototypeModel;
 	private int _userPublicLayoutSetPrototypeLayoutSize;
+	private LayoutSetPrototypeModel _userPublicLayoutSetPrototypeModel;
 	private List<LayoutModel> _userSourcePrototypeLayoutModels =
 		new ArrayList<LayoutModel>();
 
