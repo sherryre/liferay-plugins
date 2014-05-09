@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.Group;
@@ -39,8 +40,11 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.comparator.UserFirstNameComparator;
 import com.liferay.portlet.PortletURLFactoryUtil;
+import com.liferay.portlet.social.model.SocialRelation;
 import com.liferay.portlet.social.model.SocialRelationConstants;
+import com.liferay.portlet.social.service.SocialRelationLocalServiceUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,18 +63,29 @@ public class MicroblogsUtil {
 			long userId, ThemeDisplay themeDisplay)
 		throws PortalException, SystemException {
 
-		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		List<SocialRelation> socialRelations =
+			SocialRelationLocalServiceUtil.getRelations(
+				userId, SocialRelationConstants.TYPE_BI_CONNECTION,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-		List<User> users = UserLocalServiceUtil.getSocialUsers(
-			userId, SocialRelationConstants.TYPE_BI_CONNECTION,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-			new UserFirstNameComparator(true));
+		List<User> users = new ArrayList<User>();
 
-		for (User user : users) {
+		for (SocialRelation socialRelation : socialRelations) {
+			User user = UserLocalServiceUtil.getUser(
+				socialRelation.getUserId2());
+
 			if (user.isDefaultUser() || (userId == user.getUserId())) {
 				continue;
 			}
 
+			users.add(user);
+		}
+
+		ListUtil.sort(users, new UserFirstNameComparator(false));
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		for (User user : users) {
 			JSONObject userJSONObject = JSONFactoryUtil.createJSONObject();
 
 			userJSONObject.put("emailAddress", user.getEmailAddress());
