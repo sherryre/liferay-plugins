@@ -33,13 +33,13 @@ Map<Integer, List<CalendarBooking>> calendarBookings = EventsDisplayUtil.getCale
 		for (int i = 0 ; i < maxDaysDisplayed; i++) {
 			List<CalendarBooking> currentCalendarBookings = calendarBookings.get(i);
 
-			if (curCalendarBookings.isEmpty()) {
+			if (currentCalendarBookings.isEmpty()) {
 				continue;
 			}
 
-			ListUtil.sort(curCalendarBookings, new CalendarBookingTimeComparator(locale));
+			ListUtil.sort(currentCalendarBookings, new CalendarBookingTimeComparator(locale));
 
-			request.setAttribute("view.jsp-calendarBookings", curCalendarBookings);
+			request.setAttribute("view.jsp-calendarBookings", currentCalendarBookings);
 		%>
 
 			<liferay-util:include page="/view_events.jsp" servletContext="<%= application %>">
