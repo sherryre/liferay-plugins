@@ -280,7 +280,7 @@ public class SODataFactory extends DataFactory {
 
 		sb.append("last-merge-time=");
 		sb.append(System.currentTimeMillis());
-		sb.append(StringPool.SPACE);
+		sb.append("\\n");
 		sb.append(sourcePrototypeLayout.getTypeSettings());
 
 		layoutModel.setTypeSettings(sb.toString());
