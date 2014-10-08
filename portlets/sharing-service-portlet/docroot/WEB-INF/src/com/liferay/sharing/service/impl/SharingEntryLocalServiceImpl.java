@@ -84,8 +84,25 @@ public class SharingEntryLocalServiceImpl
 	}
 
 	@Override
+	public int countEntriesByUserId(
+		long userId, long[] classNameIds, Map<Long, long[]> scopes) {
+
+		return sharingEntryFinder.countEntriesByUserId(
+			userId, classNameIds, scopes);
+	}
+
+	@Override
 	public void deleteSharingEntries(long classNameId, long classPK) {
 		sharingEntryPersistence.removeByC_C(classNameId, classPK);
+	}
+
+	@Override
+	public List<Object[]> getEntriesByUserId(
+		long userId, long[] classNameIds, Map<Long, long[]> scopes,
+		int start, int end) {
+
+		return sharingEntryFinder.findEntriesByUserId(
+			userId, classNameIds, scopes, start, end);
 	}
 
 	@Override
