@@ -199,6 +199,20 @@ public class AssetSharingEntryLocalServiceUtil {
 		return getService().getActionableDynamicQuery();
 	}
 
+	public static java.util.List<java.lang.Object[]> getAssetEntriesByUserId(
+		long userId, long[] classNameIds,
+		java.util.Map<java.lang.Long, long[]> sharedTos, int start, int end) {
+		return getService()
+				   .getAssetEntriesByUserId(userId, classNameIds, sharedTos,
+			start, end);
+	}
+
+	public static int getAssetEntriesByUserIdCount(long userId,
+		long[] classNameIds, java.util.Map<java.lang.Long, long[]> sharedTos) {
+		return getService()
+				   .getAssetEntriesByUserIdCount(userId, classNameIds, sharedTos);
+	}
+
 	public static java.util.List<com.liferay.asset.sharing.model.AssetSharingEntry> getAssetSharingEntries(
 		long classNameId, long classPK) {
 		return getService().getAssetSharingEntries(classNameId, classPK);
