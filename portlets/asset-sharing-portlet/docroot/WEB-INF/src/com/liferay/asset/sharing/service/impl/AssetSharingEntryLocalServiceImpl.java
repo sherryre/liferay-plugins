@@ -74,6 +74,24 @@ public class AssetSharingEntryLocalServiceImpl
 	}
 
 	@Override
+	public List<Object[]> getAssetEntriesByUserId(
+		long userId, long[] classNameIds,
+		Map<Long, long[]> sharedToClassPKsMap, int start, int end) {
+
+		return assetSharingEntryFinder.findAssetEntriesByUserId(
+			userId, classNameIds, sharedToClassPKsMap, start, end);
+	}
+
+	@Override
+	public int getAssetEntriesByUserIdCount(
+		long userId, long[] classNameIds,
+		Map<Long, long[]> sharedToClassPKsMap) {
+
+		return assetSharingEntryFinder.countAssetEntriesByUserId(
+			userId, classNameIds, sharedToClassPKsMap);
+	}
+
+	@Override
 	public List<AssetSharingEntry> getAssetSharingEntries(
 		long classNameId, long classPK) {
 
