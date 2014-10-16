@@ -16,6 +16,7 @@ package com.liferay.asset.sharing.service.persistence.impl;
 
 import com.liferay.asset.sharing.model.AssetSharingEntry;
 import com.liferay.asset.sharing.service.persistence.AssetSharingEntryFinder;
+import com.liferay.asset.sharing.util.AssetSharingEntryConstants;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
@@ -238,7 +239,9 @@ public class AssetSharingEntryFinderImpl
 		Arrays.sort(sharedToClassPKs);
 
 		if (sharedToClassPKs.length == 1) {
-			if (sharedToClassPKs[0] == _TYPE_EVERYONE) {
+			if (sharedToClassPKs[0] ==
+					AssetSharingEntryConstants.TYPE_EVERYONE) {
+
 				sb = new StringBundler(2);
 
 				sb.append(
@@ -262,7 +265,9 @@ public class AssetSharingEntryFinderImpl
 			}
 		}
 		else if (sharedToClassPKs.length == 2) {
-			if (sharedToClassPKs[0] == _TYPE_EVERYONE) {
+			if (sharedToClassPKs[0] ==
+					AssetSharingEntryConstants.TYPE_EVERYONE) {
+
 				sb = new StringBundler(8);
 
 				sb.append(
@@ -342,7 +347,9 @@ public class AssetSharingEntryFinderImpl
 					Arrays.sort(sharedToClassPKs);
 
 					if (sharedToClassPKs.length == 1) {
-						if (sharedToClassPKs[0] == _TYPE_EVERYONE) {
+						if (sharedToClassPKs[0] ==
+								AssetSharingEntryConstants.TYPE_EVERYONE) {
+
 							qPos.add(sharedToClassPKs[0]);
 						}
 						else {
@@ -371,7 +378,5 @@ public class AssetSharingEntryFinderImpl
 
 	private static final long _SOCIAL_RELATION_CLASS_NAME_ID =
 		ClassNameServiceUtil.fetchClassNameId(SocialRelation.class);
-
-	private static final long _TYPE_EVERYONE = 0;
 
 }
